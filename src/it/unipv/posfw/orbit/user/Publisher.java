@@ -14,7 +14,7 @@ public class Publisher extends User {
 	
 	public Game publishGame(String title, String genre, float price) {
 		Game game = new Game(title, genre, price);
-		// add game to the database's catalog
+		// aggiungere il gioco al database del catalogo
 		return game;
 	}
 

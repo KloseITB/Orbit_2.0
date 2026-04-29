@@ -1,5 +1,6 @@
 package it.unipv.posfw.orbit.game;
 
+import it.unipv.posfw.orbit.payment.IPaymentStrategy;
 import it.unipv.posfw.orbit.user.User;
 
 public class Game {
@@ -15,7 +16,7 @@ public class Game {
 	
 	public Game(String title, String genre, float price) {
 		// this.gameID = genGameID();
-		// call database method that gives the game an ID. if the id is 0, return an exception
+		// chiamare il metodo che genera l'ID del gioco, se l'ID è 0 genera una exception
 		this.title = title;
 		this.genre = genre.toLowerCase();
 		this.price = price;
@@ -23,14 +24,9 @@ public class Game {
 	
 	// ---------- Methods ----------
 	
-	public void Buy(User user) {
-		if(user.getBalance() < price) {
-			System.out.println("ERROR: Balance unsufficent");
-		} else {
-			user.removeFunds(price);
+	public void buy(IPaymentStrategy paymentMethod, User user) {
+			paymentMethod.pay(this.price);
 			user.addGameToLibrary(this);
-		}
-
 	}
 	
 	// ---------- Getters & Setters ----------
