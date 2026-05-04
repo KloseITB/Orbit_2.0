@@ -1,8 +1,5 @@
 package it.unipv.posfw.orbit.game;
 
-import it.unipv.posfw.orbit.payment.IPaymentStrategy;
-import it.unipv.posfw.orbit.user.User;
-
 public class Game {
 	
 	// ---------- Variables ----------
@@ -20,13 +17,6 @@ public class Game {
 		this.title = title;
 		this.genre = genre.toLowerCase();
 		this.price = price;
-	}
-	
-	// ---------- Methods ----------
-	
-	public void buy(IPaymentStrategy paymentMethod, User user) {
-			paymentMethod.pay(this.price);
-			user.addGameToLibrary(this);
 	}
 	
 	// ---------- Getters & Setters ----------
