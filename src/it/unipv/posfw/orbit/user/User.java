@@ -11,7 +11,7 @@ public class User {
 	private int userID = 0;
 	private String nickname;
 	private String password;
-	private Library library;
+	private Library library; //user.getLibrary().getGames(user);
 	
 	// ---------- Constructors ----------
 	
