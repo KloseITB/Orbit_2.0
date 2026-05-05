@@ -8,6 +8,7 @@ public class ClientManagerSingleton {
 	
 	private static ClientManagerSingleton instance;
 	private User currentUser;
+	private boolean isLoggedIn = false;
 	
 	// ---------- Constructor ----------
 	
@@ -28,5 +29,13 @@ public class ClientManagerSingleton {
 	
 	public User getCurrentUser() {
 		return currentUser;
+	}
+	
+	public void setLoggedIn(boolean value) {
+		isLoggedIn = value;
+	}
+	
+	public boolean getLoggedIn() {
+		return isLoggedIn;
 	}
 }

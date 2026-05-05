@@ -2,17 +2,18 @@ package it.unipv.posfw.orbit.gui;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.*;
+
+import it.unipv.posfw.orbit.client.ClientManagerSingleton;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
+@SuppressWarnings("serial")
 public class Store extends JFrame {
 
-    // ── Palette colori ──────────────────────────────────────────────────────
+	//---------- Colors ----------
     private static final Color BG_DARK       = new Color(22, 22, 30);
     private static final Color PANEL_BG      = new Color(42, 38, 60);
     private static final Color ROW_ODD       = new Color(55, 50, 78);
@@ -24,7 +25,7 @@ public class Store extends JFrame {
     private static final Color TEXT_DIM      = new Color(150, 145, 165);
     private static final Color SCROLLBAR_BG  = new Color(35, 32, 50);
 
-    // ── Dati di esempio del catalogo ─────────────────────────────────────────
+    // dati di esempio del catalogo
     private static final String[][] GAMES = {
         {"Cyberpunk 2077",              "59,99 €"},
         {"The Witcher 3: Wild Hunt",     "29,99 €"},
@@ -46,7 +47,7 @@ public class Store extends JFrame {
         {"Dead Cells",                   "24,99 €"},
     };
 
-    // ──────────────────────────────────────────────────────────────────────────
+    // ---------- Constructor ----------
 
     public Store() {
         setTitle("Orbit - Store");
@@ -65,19 +66,19 @@ public class Store extends JFrame {
         setLocationRelativeTo(null);
         setBackground(BG_DARK);
 
-        // Pannello radice con sfondo scuro e padding
+        // Main Panel
         JPanel root = new JPanel(new BorderLayout(24, 0));
         root.setBackground(BG_DARK);
         root.setBorder(BorderFactory.createEmptyBorder(22, 22, 22, 22));
 
-        // ── Sezione sinistra: logo + lista giochi ─────────────────────────
+        // Logo + game list
         JPanel leftSection = new JPanel(new BorderLayout(0, 16));
         leftSection.setBackground(BG_DARK);
 
         leftSection.add(buildLogoPanel(),     BorderLayout.NORTH);
         leftSection.add(buildGameList(),      BorderLayout.CENTER);
 
-        // ── Sezione destra: pulsanti navigazione ──────────────────────────
+        // Navigation buttons
         JPanel rightSection = buildNavPanel();
 
         root.add(leftSection,  BorderLayout.CENTER);
@@ -87,7 +88,7 @@ public class Store extends JFrame {
         setVisible(true);
     }
 
-    // ── Logo ─────────────────────────────────────────────────────────────────
+    // Logo Panel
 
     private JPanel buildLogoPanel() {
         JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -102,8 +103,7 @@ public class Store extends JFrame {
         return wrapper;
     }
 
-    // ── Lista giochi scorrevole ───────────────────────────────────────────────
-
+    // Game List Panel
     private JScrollPane buildGameList() {
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
@@ -125,7 +125,7 @@ public class Store extends JFrame {
         scrollPane.getVerticalScrollBar().setBackground(SCROLLBAR_BG);
         scrollPane.getViewport().setBackground(PANEL_BG);
 
-        // Stile scrollbar
+        // Scroll bar Styling
         scrollPane.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
             @Override protected void configureScrollBarColors() {
                 thumbColor     = new Color(110, 100, 150);
@@ -149,24 +149,24 @@ public class Store extends JFrame {
         row.setBorder(BorderFactory.createEmptyBorder(9, 14, 9, 10));
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 46));
 
-        // Titolo
+        // Title
         JLabel titleLabel = new JLabel(title);
         titleLabel.setForeground(TEXT_LIGHT);
         titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
-        // Prezzo
+        // Price
         JLabel priceLabel = new JLabel(price);
         priceLabel.setForeground(TEXT_DIM);
         priceLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         priceLabel.setPreferredSize(new Dimension(68, 20));
         priceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        // Pulsante BUY
+        // Buy button
         JButton buyBtn = createStyledButton("BUY", 65, 30);
         buyBtn.addActionListener(e ->
             JOptionPane.showMessageDialog(this,
-                "Hai aggiunto \"" + title + "\" al carrello!",
-                "Carrello", JOptionPane.INFORMATION_MESSAGE)
+                "You added \"" + title + "\" to the shopping cart!",
+                "Shopping Cart", JOptionPane.INFORMATION_MESSAGE)
         );
 
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
@@ -177,7 +177,7 @@ public class Store extends JFrame {
         row.add(titleLabel, BorderLayout.CENTER);
         row.add(rightPanel,  BorderLayout.EAST);
 
-        // Effetto hover sulla riga
+        // Changing color when the user hovers over the button
         MouseAdapter hoverEffect = new MouseAdapter() {
             public void mouseEntered(MouseEvent e) { row.setBackground(ROW_HOVER); }
             public void mouseExited (MouseEvent e) { row.setBackground(base);      }
@@ -188,36 +188,43 @@ public class Store extends JFrame {
         return row;
     }
 
-    // ── Pannello navigazione (destra) ─────────────────────────────────────────
-
+    // Navigation buttons page
     private JPanel buildNavPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(BG_DARK);
         panel.setBorder(BorderFactory.createEmptyBorder(85, 0, 0, 0));
-
-        JButton libraryBtn = createNavButton("LIBRARY");
+        
         JButton accountBtn = createNavButton("ACCOUNT");
+        JButton libraryBtn = createNavButton("LIBRARY");
+        
+        
+        if(!ClientManagerSingleton.getInstance().getLoggedIn()) {
+        	libraryBtn.setEnabled(false);
+        	libraryBtn.setText("");
+        	libraryBtn.setOpaque(false);
+        }
 
         libraryBtn.addActionListener(e -> {
-        	dispose();             // chiude la libreria
-        	new Library();       // apre lo store
+        	dispose();             
+        	new Library();       
         });
-        accountBtn.addActionListener(e ->
-            JOptionPane.showMessageDialog(this,
-                "Qui verranno mostrati i dettagli del tuo account.",
-                "Il tuo Account", JOptionPane.INFORMATION_MESSAGE)
-        );
-
-        panel.add(libraryBtn);
-        panel.add(Box.createVerticalStrut(14));
+        
+        accountBtn.addActionListener(e -> { 
+        	dispose();
+        	new Account();
+        });
+        
         panel.add(accountBtn);
+        panel.add(Box.createVerticalStrut(14));
+        panel.add(libraryBtn);
         panel.add(Box.createVerticalGlue());
+
 
         return panel;
     }
 
-    // ── Factory: pulsante di navigazione grande ────────────────────────────────
+    //---------- Helpers ----------
 
     private JButton createNavButton(String text) {
         JButton btn = new JButton(text);
@@ -236,8 +243,6 @@ public class Store extends JFrame {
         });
         return btn;
     }
-
-    // ── Factory: pulsante piccolo (BUY) ───────────────────────────────────────
 
     private JButton createStyledButton(String text, int w, int h) {
         JButton btn = new JButton(text);

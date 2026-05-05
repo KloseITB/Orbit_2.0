@@ -7,7 +7,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
-
+@SuppressWarnings("serial")
 public class Library extends JFrame {
 
     // ── Palette colori (identica a GameStore) ────────────────────────────────
@@ -195,15 +195,15 @@ public class Library extends JFrame {
             dispose();             // chiude la libreria
             new Store();       // apre lo store
         });
-        accountBtn.addActionListener(e ->
-            JOptionPane.showMessageDialog(this,
-                "Qui verranno mostrati i dettagli del tuo account.",
-                "Il tuo Account", JOptionPane.INFORMATION_MESSAGE)
-        );
+        
+        accountBtn.addActionListener(e ->{ 
+        	dispose();
+        	new Store();
+        });
 
-        panel.add(storeBtn);
-        panel.add(Box.createVerticalStrut(14));
         panel.add(accountBtn);
+        panel.add(Box.createVerticalStrut(14));
+        panel.add(storeBtn);
         panel.add(Box.createVerticalGlue());
 
         return panel;
