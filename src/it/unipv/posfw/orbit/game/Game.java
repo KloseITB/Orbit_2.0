@@ -21,6 +21,10 @@ public class Game {
 	
 	// ---------- Getters & Setters ----------
 	
+	public void setID(int gameID) {
+		this.gameID = gameID;
+	}
+	
 	public int getID() {
 		return this.gameID;
 	}

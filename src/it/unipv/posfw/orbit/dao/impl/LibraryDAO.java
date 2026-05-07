@@ -50,4 +50,25 @@ public class LibraryDAO implements ILibraryDAO {
         }
         return library;
     }
+    
+    @Override
+    public boolean hasGame(int userId, int gameId) {
+    	// we use SELECT 1 just to check the existence of the game in the list
+        String query = "SELECT 1 FROM Library WHERE userID = ? AND gameID = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+        	 PreparedStatement pstmt = conn.prepareStatement(query)) {
+        	
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, gameId);
+            
+            ResultSet rs = pstmt.executeQuery();
+            
+            return rs.next(); // if it's true the game exist in the list
+            
+        } catch (SQLException e) {
+        	e.printStackTrace();
+            return false;
+        }
+    }
 }

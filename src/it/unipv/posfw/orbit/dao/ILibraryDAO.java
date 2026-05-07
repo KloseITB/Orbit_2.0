@@ -8,4 +8,6 @@ public interface ILibraryDAO {
     boolean addGameToLibrary(int userId, int gameId);
     
     List<Game> getLibraryByUserId(int userId);
+    
+    boolean hasGame(int userId, int gameId);
 }

@@ -36,6 +36,10 @@ public class User {
 	
 	// ---------- Getters & Setters ----------
 	
+	public void setID(int userID) {
+		this.userID = userID;
+	}
+	
 	public int getID() {
 		return this.userID;
 	}
