@@ -4,6 +4,7 @@ public class Paypal implements IPaymentStrategy {
 	
 	// ---------- Variables ----------
 	
+	@SuppressWarnings("unused")
 	private String email = "default@mail.com";
 	
 	// ---------- Constructors ----------

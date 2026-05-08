@@ -13,7 +13,8 @@ import java.io.IOException;
 @SuppressWarnings("serial")
 public class Store extends JFrame {
 
-	//---------- Colors ----------
+	//------------------------------ Colors ------------------------------
+	
     private static final Color BG_DARK       = new Color(22, 22, 30);
     private static final Color PANEL_BG      = new Color(42, 38, 60);
     private static final Color ROW_ODD       = new Color(55, 50, 78);
@@ -25,7 +26,7 @@ public class Store extends JFrame {
     private static final Color TEXT_DIM      = new Color(150, 145, 165);
     private static final Color SCROLLBAR_BG  = new Color(35, 32, 50);
 
-    // dati di esempio del catalogo
+    // dati placeholder del catalogo
     private static final String[][] GAMES = {
         {"Cyberpunk 2077",              "59,99 €"},
         {"The Witcher 3: Wild Hunt",     "29,99 €"},
@@ -89,7 +90,6 @@ public class Store extends JFrame {
     }
 
     // Logo Panel
-
     private JPanel buildLogoPanel() {
         JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         wrapper.setBackground(BG_DARK);
@@ -167,6 +167,8 @@ public class Store extends JFrame {
             JOptionPane.showMessageDialog(this,
                 "You added \"" + title + "\" to the shopping cart!",
                 "Shopping Cart", JOptionPane.INFORMATION_MESSAGE)
+            
+            // TO-DO implement checkout panel
         );
 
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
@@ -224,7 +226,7 @@ public class Store extends JFrame {
         return panel;
     }
 
-    //---------- Helpers ----------
+    //------------------------------ Helpers ------------------------------
 
     private JButton createNavButton(String text) {
         JButton btn = new JButton(text);

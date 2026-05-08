@@ -4,6 +4,7 @@ public class Bitcoin implements IPaymentStrategy {
 	
 	// ---------- Variables ----------
 	
+	@SuppressWarnings("unused")
 	private String walletAddress;
 	
 	// ---------- Constructors ----------

@@ -4,6 +4,7 @@ public class CreditCard implements IPaymentStrategy{
 	
 	// ---------- Variables ----------
 	
+	@SuppressWarnings("unused")
 	private String code = "0000-0000-0000";
 	
 	// ---------- Constructors ----------

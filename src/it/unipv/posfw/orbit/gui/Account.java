@@ -26,25 +26,21 @@ public class Account extends JFrame {
     private static final Color DANGER_RED    = new Color(210, 70, 70);
     private static final Color DANGER_HOVER  = new Color(240, 90, 90);
     
-    // ── ════════════════════════════════════════════════════════════════════ ──
     //   STATO DI LOGIN — DA COLLEGARE AL SISTEMA DI AUTENTICAZIONE
-    //
-    //   Impostare a `true` se l'utente ha già effettuato il login,
+    //   impostare a `true` se l'utente ha già effettuato il login,
     //   `false` per mostrare la schermata di accesso.
-    // ── ════════════════════════════════════════════════════════════════════ ──
-    private boolean isLoggedIn = false;
 
-    // ── ════════════════════════════════════════════════════════════════════ ──
+    private boolean isLoggedIn = ClientManagerSingleton.getInstance().getLoggedIn();
+
     //   DATI UTENTE — PLACEHOLDER
-    //   Sostituire con il caricamento reale dal sistema di autenticazione
-    //   (es. oggetto User, sessione, database, ecc.).
-    //
+    //   sostituire con il caricamento reale dal sistema di autenticazione
     //   Ruoli disponibili: "user" | "publisher"
-    // ── ════════════════════════════════════════════════════════════════════ ──
+
     private String  accountNickname  = "Player123";
     private String  accountRole      = "user";       // "user" oppure "publisher"
     private int     ownedGamesCount  = 8;
-    // ── ════════════════════════════════════════════════════════════════════ ──
+
+
 
     public Account() {
         setTitle("Orbit — Account");
@@ -116,8 +112,8 @@ public class Account extends JFrame {
             BorderFactory.createEmptyBorder(36, 44, 36, 44)
         ));
 
-        JLabel title    = centeredLabel("Accedi al tuo account", 20, Font.BOLD, TEXT_LIGHT);
-        JLabel subtitle = centeredLabel("Inserisci le credenziali per continuare", 13, Font.PLAIN, TEXT_DIM);
+        JLabel title    = centeredLabel("Login to your account", 20, Font.BOLD, TEXT_LIGHT);
+        JLabel subtitle = centeredLabel("Insert your credentials to continue", 13, Font.PLAIN, TEXT_DIM);
 
         JLabel    nickLabel = leftLabel("Nickname", 13, Font.PLAIN, TEXT_DIM);
         JTextField nickField = createTextField(280, 38);
@@ -128,19 +124,15 @@ public class Account extends JFrame {
         passField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
         styleTextField(passField);
 
-        JLabel errorLabel = centeredLabel("Nickname o password errati.", 12, Font.PLAIN, DANGER_RED);
+        JLabel errorLabel = centeredLabel("Nickname and/or password incorrect.", 12, Font.PLAIN, DANGER_RED);
         errorLabel.setVisible(false);
 
-        JButton loginBtn = createAccentButton("ACCEDI", 280, 42);
+        JButton loginBtn = createAccentButton("LOGIN", 280, 42);
         loginBtn.addActionListener(e -> {
             String nick = nickField.getText().trim();
             String pass = new String(passField.getPassword()).trim();
 
-            // ── ══════════════════════════════════════════════════════ ──
-            //   LOGICA DI AUTENTICAZIONE — DA IMPLEMENTARE
-            //   Sostituire la condizione qui sotto con la vera verifica
-            //   delle credenziali (es. query al database, chiamata API).
-            // ── ══════════════════════════════════════════════════════ ──
+            //   sostituire la condizione qui sotto con la vera verifica delle credenziali 
             boolean credentialsValid = !nick.isEmpty() && !pass.isEmpty();
 
             if (credentialsValid) {
@@ -192,12 +184,14 @@ public class Account extends JFrame {
             BorderFactory.createEmptyBorder(36, 44, 36, 44)
         ));
 
-        JLabel titleLabel = centeredLabel("Il tuo Account", 20, Font.BOLD, TEXT_LIGHT);
+        JLabel titleLabel = centeredLabel("Your account", 20, Font.BOLD, TEXT_LIGHT);
 
         JSeparator sep = new JSeparator();
         sep.setForeground(BORDER_COLOR);
         sep.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
-
+        
+        // sistema di riconoscimento ruolo (Work in progress)
+        
         String roleDisplay = accountRole.equals("publisher") ? "Publisher" : "User";
         Color  roleBg      = accountRole.equals("publisher")
                              ? new Color(100, 60, 180)
@@ -214,7 +208,7 @@ public class Account extends JFrame {
         badgeWrapper.setOpaque(false);
         badgeWrapper.add(roleBadge);
 
-        // Righe informazioni
+        // Info Panel
         JPanel infoPanel = new JPanel(new GridBagLayout());
         infoPanel.setOpaque(false);
         infoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -222,7 +216,7 @@ public class Account extends JFrame {
         addInfoRow(infoPanel, "Role",             roleDisplay,                1);
         addInfoRow(infoPanel, "Games Owned", String.valueOf(ownedGamesCount), 2);
 
-        // Pulsante logout
+        // Logout
         JButton logoutBtn = new JButton("Logout");
         logoutBtn.setBackground(DANGER_RED);
         logoutBtn.setForeground(Color.WHITE);

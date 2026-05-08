@@ -10,7 +10,8 @@ import java.io.IOException;
 @SuppressWarnings("serial")
 public class Library extends JFrame {
 
-    // ── Palette colori (identica a GameStore) ────────────────────────────────
+	//------------------------------ Colors ------------------------------
+	
     private static final Color BG_DARK        = new Color(22, 22, 30);
     private static final Color PANEL_BG       = new Color(42, 38, 60);
     private static final Color ROW_ODD        = new Color(55, 50, 78);
@@ -21,27 +22,24 @@ public class Library extends JFrame {
     private static final Color PLAY_GREEN     = new Color(60, 190, 80);
     private static final Color PLAY_HOVER     = new Color(80, 220, 100);
     private static final Color TEXT_LIGHT     = new Color(220, 215, 235);
-    private static final Color TEXT_DIM       = new Color(150, 145, 165);
     private static final Color SCROLLBAR_BG   = new Color(35, 32, 50);
 
-    // ── ════════════════════════════════════════════════════════════════════ ──
     //   GIOCHI DELLA LIBRERIA — PLACEHOLDER
     //   Sostituire questo array con il caricamento dinamico dei giochi
-    //   acquistati dall'utente (es. da database, file, API, ecc.).
-    //
-    //   Formato: { "Titolo del gioco", "Ore giocate" }
-    // ── ════════════════════════════════════════════════════════════════════ ──
-    private static final String[][] LIBRARY_GAMES = {
-        {"Cyberpunk 2077",           "42 ore"},
-        {"The Witcher 3: Wild Hunt", "138 ore"},
-        {"Hollow Knight",            "27 ore"},
-        {"Hades",                    "55 ore"},
-        {"Celeste",                  "18 ore"},
-        {"Portal 2",                 "11 ore"},
-        {"Stardew Valley",           "203 ore"},
-        {"Dead Cells",               "33 ore"},
+    //   acquistati dall'utente
+
+    private static final String[] LIBRARY_GAMES = {
+        "Cyberpunk 2077",
+        "The Witcher 3: Wild Hunt",
+        "Hollow Knight",
+        "Hades",
+        "Celeste",
+        "Portal 2",
+        "Stardew Valley",
+        "Dead Cells",
     };
-    // ── ════════════════════════════════════════════════════════════════════ ──
+    
+    //------------------------------ Constructor ------------------------------
 
     public Library() {
         setTitle("Orbit - Library");
@@ -50,7 +48,6 @@ public class Library extends JFrame {
 		try {
 			img = ImageIO.read(new File("icon.png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         setIconImage(img);
@@ -65,22 +62,19 @@ public class Library extends JFrame {
         root.setBackground(BG_DARK);
         root.setBorder(BorderFactory.createEmptyBorder(22, 22, 22, 22));
 
-        // ── Sezione sinistra: logo + lista giochi ─────────────────────────
         JPanel leftSection = new JPanel(new BorderLayout(0, 16));
         leftSection.setBackground(BG_DARK);
         leftSection.add(buildLogoPanel(), BorderLayout.NORTH);
         leftSection.add(buildGameList(),  BorderLayout.CENTER);
 
-        // ── Sezione destra: pulsanti navigazione ──────────────────────────
         root.add(leftSection,    BorderLayout.CENTER);
         root.add(buildNavPanel(), BorderLayout.EAST);
 
         setContentPane(root);
         setVisible(true);
     }
-
-    // ── Logo ─────────────────────────────────────────────────────────────────
-
+    
+    // Logo panel
     private JPanel buildLogoPanel() {
         JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         wrapper.setBackground(BG_DARK);
@@ -94,8 +88,7 @@ public class Library extends JFrame {
         return wrapper;
     }
 
-    // ── Lista giochi scorrevole ───────────────────────────────────────────────
-
+    // Game list
     private JScrollPane buildGameList() {
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
@@ -103,7 +96,7 @@ public class Library extends JFrame {
         listPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 
         for (int i = 0; i < LIBRARY_GAMES.length; i++) {
-            listPanel.add(createGameRow(LIBRARY_GAMES[i][0], LIBRARY_GAMES[i][1], i));
+            listPanel.add(createGameRow(LIBRARY_GAMES[i], i));
             if (i < LIBRARY_GAMES.length - 1) {
                 listPanel.add(Box.createVerticalStrut(2));
             }
@@ -133,7 +126,7 @@ public class Library extends JFrame {
         return scrollPane;
     }
 
-    private JPanel createGameRow(String title, String hoursPlayed, int index) {
+    private JPanel createGameRow(String title, int index) {
         Color base = (index % 2 == 0) ? ROW_ODD : ROW_EVEN;
 
         JPanel row = new JPanel(new BorderLayout(12, 0));
@@ -141,35 +134,27 @@ public class Library extends JFrame {
         row.setBorder(BorderFactory.createEmptyBorder(9, 14, 9, 10));
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 46));
 
-        // Titolo
+        // Title
         JLabel titleLabel = new JLabel(title);
         titleLabel.setForeground(TEXT_LIGHT);
         titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
-        // Ore giocate
-        JLabel hoursLabel = new JLabel(hoursPlayed);
-        hoursLabel.setForeground(TEXT_DIM);
-        hoursLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        hoursLabel.setPreferredSize(new Dimension(68, 20));
-        hoursLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-
-        // Pulsante PLAY
+        // Play button
         JButton playBtn = createPlayButton("PLAY", 65, 30);
         playBtn.addActionListener(e ->
             JOptionPane.showMessageDialog(this,
-                "Avvio di \"" + title + "\"...",
-                "Avvio Gioco", JOptionPane.INFORMATION_MESSAGE)
+                "Starting \"" + title + "\"...",
+                "Game Starting", JOptionPane.INFORMATION_MESSAGE)
         );
 
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         rightPanel.setOpaque(false);
-        rightPanel.add(hoursLabel);
         rightPanel.add(playBtn);
 
         row.add(titleLabel, BorderLayout.CENTER);
         row.add(rightPanel, BorderLayout.EAST);
 
-        // Effetto hover sulla riga
+        // Hovering effect
         MouseAdapter hover = new MouseAdapter() {
             public void mouseEntered(MouseEvent e) { row.setBackground(ROW_HOVER); }
             public void mouseExited (MouseEvent e) { row.setBackground(base);      }
@@ -180,8 +165,7 @@ public class Library extends JFrame {
         return row;
     }
 
-    // ── Pannello navigazione (destra) ─────────────────────────────────────────
-
+    // Navigation buttons
     private JPanel buildNavPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -192,13 +176,13 @@ public class Library extends JFrame {
         JButton accountBtn = createNavButton("ACCOUNT");
 
         storeBtn.addActionListener(e -> {
-            dispose();             // chiude la libreria
-            new Store();       // apre lo store
+            dispose();             
+            new Store();       
         });
         
         accountBtn.addActionListener(e ->{ 
         	dispose();
-        	new Store();
+        	new Account();
         });
 
         panel.add(accountBtn);
@@ -209,7 +193,7 @@ public class Library extends JFrame {
         return panel;
     }
 
-    // ── Factory: pulsante di navigazione ─────────────────────────────────────
+    //------------------------------ Helpers ------------------------------
 
     private JButton createNavButton(String text) {
         JButton btn = new JButton(text);
@@ -228,8 +212,6 @@ public class Library extends JFrame {
         });
         return btn;
     }
-
-    // ── Factory: pulsante PLAY verde ─────────────────────────────────────────
 
     private JButton createPlayButton(String text, int w, int h) {
         JButton btn = new JButton(text);
