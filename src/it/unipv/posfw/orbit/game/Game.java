@@ -1,13 +1,16 @@
 package it.unipv.posfw.orbit.game;
 
+import java.util.LinkedList;
+
 public class Game {
 	
 	// ---------- Variables ----------
 	
-	private int gameID = 0;
+	private String gameID = "0";
 	private String title;
 	private String genre;
 	private float price;
+	private LinkedList<Review> reviewList;
 	
 	// ---------- Constructors ----------
 	
@@ -19,13 +22,15 @@ public class Game {
 		this.price = price;
 	}
 	
-	// ---------- Getters & Setters ----------
+	// ---------- Methods ----------
 	
-	public void setID(int gameID) {
-		this.gameID = gameID;
+	public void addReview(Review review) {
+		reviewList.add(review);
 	}
 	
-	public int getID() {
+	// ---------- Getters & Setters ----------
+	
+	public String getID() {
 		return this.gameID;
 	}
 	

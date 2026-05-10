@@ -8,6 +8,7 @@ public class Publisher extends User {
 	
 	public Publisher(String nickname, String password) {
 		super(nickname, password);
+		super.role = "Publisher";
 	}
 	
 	// ---------- Methods ----------

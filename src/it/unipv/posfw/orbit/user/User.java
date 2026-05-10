@@ -8,10 +8,11 @@ public class User {
 	
 	// ---------- Variables ----------
 	
-	private int userID = 0;
+	private String userID = "0";
 	private String nickname;
 	private String password;
-	private Library library; //user.getLibrary().getGames(user);
+	private Library library;
+	protected String role = "User";
 	
 	// ---------- Constructors ----------
 	
@@ -23,24 +24,9 @@ public class User {
 		this.library = new Library();
 	}
 	
-	// ---------- Methods ----------
-	
-	public void addGameToLibrary(Game game) {
-		library.addGame(game);
-	}
-	
-	public void reviewGame(Game game, int vote) {
-		Review review = new Review(this.userID, game.getID(), vote);
-		// salvare la review nel database
-	}
-	
 	// ---------- Getters & Setters ----------
 	
-	public void setID(int userID) {
-		this.userID = userID;
-	}
-	
-	public int getID() {
+	public String getID() {
 		return this.userID;
 	}
 	

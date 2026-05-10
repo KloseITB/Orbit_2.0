@@ -7,5 +7,5 @@ public interface IReviewDAO {
     
 	boolean addReview(Review review);
     
-	List<Review> getReviewsByGameId(int gameId);
+	List<Review> getReviewsByGameId(String gameId);
 }

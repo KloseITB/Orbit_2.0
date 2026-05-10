@@ -3,7 +3,7 @@ package it.unipv.posfw.orbit.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import it.unipv.posfw.orbit.client.ClientManagerSingleton;
+import it.unipv.posfw.orbit.client.ClientManager;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 
 @SuppressWarnings("serial")
-public class Account extends JFrame {
+public class AccountUI extends JFrame {
 
     //---------- Colors ----------
     private static final Color BG_DARK       = new Color(22, 22, 30);
@@ -30,7 +30,7 @@ public class Account extends JFrame {
     //   impostare a `true` se l'utente ha già effettuato il login,
     //   `false` per mostrare la schermata di accesso.
 
-    private boolean isLoggedIn = ClientManagerSingleton.getInstance().getLoggedIn();
+    private boolean isLoggedIn = ClientManager.getInstance().getIsLoggedIn();
 
     //   DATI UTENTE — PLACEHOLDER
     //   sostituire con il caricamento reale dal sistema di autenticazione
@@ -42,7 +42,7 @@ public class Account extends JFrame {
 
 
 
-    public Account() {
+    public AccountUI() {
         setTitle("Orbit — Account");
         
         Image img = null;
@@ -136,7 +136,7 @@ public class Account extends JFrame {
             boolean credentialsValid = !nick.isEmpty() && !pass.isEmpty();
 
             if (credentialsValid) {
-            	ClientManagerSingleton.getInstance().setLoggedIn(true);
+            	ClientManager.getInstance().setLoggedIn(true);
                 isLoggedIn      = true;
                 accountNickname = nick;
                 errorLabel.setVisible(false);
@@ -236,7 +236,7 @@ public class Account extends JFrame {
                 "Are you sure you want to logout?",
                 "Logout", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-            	ClientManagerSingleton.getInstance().setLoggedIn(false);
+            	ClientManager.getInstance().setLoggedIn(false);
                 isLoggedIn = false;
                 render();
             }
@@ -287,10 +287,10 @@ public class Account extends JFrame {
         JButton storeBtn   = createNavButton("STORE");
         JButton libraryBtn = createNavButton("LIBRARY");
 
-        storeBtn.addActionListener(e -> { dispose(); new Store();   });
-        libraryBtn.addActionListener(e -> { dispose(); new Library(); });
+        storeBtn.addActionListener(e -> { dispose(); new StoreUI();   });
+        libraryBtn.addActionListener(e -> { dispose(); new LibraryUI(); });
         
-        if(!ClientManagerSingleton.getInstance().getLoggedIn()) {
+        if(!ClientManager.getInstance().getIsLoggedIn()) {
         	libraryBtn.setEnabled(false);
         	libraryBtn.setText("");
         	libraryBtn.setOpaque(false);

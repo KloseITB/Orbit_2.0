@@ -1,6 +1,7 @@
 package it.unipv.posfw.orbit.client;
 
 import it.unipv.posfw.orbit.game.Game;
+import it.unipv.posfw.orbit.game.Review;
 import it.unipv.posfw.orbit.payment.IPaymentStrategy;
 import it.unipv.posfw.orbit.user.User;
 
@@ -8,7 +9,7 @@ public class ClientFacade {
 	
 	//---------- Variables ----------
 	
-	ClientManagerSingleton manager = ClientManagerSingleton.getInstance();
+	private ClientManager manager = ClientManager.getInstance();
 	
 	// ---------- Constructors ----------
 	
@@ -16,25 +17,32 @@ public class ClientFacade {
 	
 	// ---------- Methods ----------
 	
-	public void buy(IPaymentStrategy paymentMethod, Game game) {
+	public void buyGame(IPaymentStrategy paymentMethod, Game game) {
 		paymentMethod.pay(game.getPrice());
-		manager.getCurrentUser().addGameToLibrary(game);
+		manager.getLoggedUser().getLibrary().addGame(game);
 		// aggiungi una riga con l'id del gioco e l'id dell'utente che l'ha comprato
 	}
 	
+	public void reviewGame(User reviewer, Game game, int vote) {
+		Review review = new Review(reviewer, game, vote);
+		game.addReview(review);
+		// salvare la review nel database
+	}
+	
 	public void login(User user) {
-		manager.setCurrentUser(user);
+		manager.setLoggedUser(user);
 		manager.setLoggedIn(true);
 	}
 	
 	public void logout() {
-		manager.setCurrentUser(null);
+		manager.setLoggedUser(null);
 		manager.setLoggedIn(false);
 	}
 	
 	public void signup(String nickname, String password) {
 		User user = new User(nickname, password);
 		// aggiungi l'utente al database
-		manager.setCurrentUser(user);
+		manager.setLoggedUser(user);
+		manager.setLoggedIn(true);
 	}
 }

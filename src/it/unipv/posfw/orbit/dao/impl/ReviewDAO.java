@@ -19,8 +19,8 @@ public class ReviewDAO implements IReviewDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             
-            pstmt.setInt(1, review.userId());
-            pstmt.setInt(2, review.gameId());
+            pstmt.setString(1, review.reviewer().getID());
+            pstmt.setString(2, review.game().getID());
             pstmt.setInt(3, review.rating());
             
             return pstmt.executeUpdate() > 0;
@@ -31,17 +31,17 @@ public class ReviewDAO implements IReviewDAO {
     }
 
     @Override
-    public List<Review> getReviewsByGameId(int gameId) {
+    public List<Review> getReviewsByGameId(String gameId) {
         List<Review> reviews = new ArrayList<>();
         String query = "SELECT * FROM Reviews WHERE gameID = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             
-            pstmt.setInt(1, gameId);
+            pstmt.setString(1, gameId);
             ResultSet rs = pstmt.executeQuery();
             
             while (rs.next()) {
-                reviews.add(new Review(rs.getInt("userID"), rs.getInt("gameID"), rs.getInt("rating")));
+                reviews.add(new Review(/*User*/ rs.getString("userID"), /*Game*/ rs.getString("gameID"), rs.getInt("rating")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

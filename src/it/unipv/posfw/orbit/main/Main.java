@@ -3,7 +3,7 @@ package it.unipv.posfw.orbit.main;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import it.unipv.posfw.orbit.gui.Store;
+import it.unipv.posfw.orbit.gui.StoreUI;
 
 public class Main {
 
@@ -12,6 +12,6 @@ public class Main {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {}
 
-        SwingUtilities.invokeLater(Store::new);
+        SwingUtilities.invokeLater(StoreUI::new);
     }
 }
