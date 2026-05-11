@@ -1,7 +1,5 @@
 package it.unipv.posfw.orbit.user;
 
-import it.unipv.posfw.orbit.game.Game;
-import it.unipv.posfw.orbit.game.Review;
 import it.unipv.posfw.orbit.library.Library;
 
 public class User {
@@ -40,6 +38,10 @@ public class User {
 	
 	public Library getLibrary() {
 		return this.library;
+	}
+	
+	public String getRole() {
+		return role;
 	}
 	
 }

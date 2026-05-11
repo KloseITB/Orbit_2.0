@@ -1,43 +1,27 @@
 package it.unipv.posfw.orbit.client;
 
-import it.unipv.posfw.orbit.payment.Bitcoin;
-import it.unipv.posfw.orbit.payment.CreditCard;
-import it.unipv.posfw.orbit.payment.Paypal;
 import it.unipv.posfw.orbit.user.User;
 
-public class ClientManager {
+public class UserManager {
 	
 	// ---------- Variables ----------
 	
-	private static ClientManager instance;
+	private static UserManager instance;
 	private User loggedUser;
 	private boolean isLogged = false;
 	
 	// ---------- Constructor ----------
 	
-	private ClientManager() {}
+	private UserManager() {}
 	
 	// ---------- Methods ----------
 	
-	public static ClientManager getInstance() {
+	public static UserManager getInstance() {
 		if(instance == null) {
-			instance = new ClientManager();
+			instance = new UserManager();
 		}
 		return instance;
 	}
-	
-	public Paypal createPaypalPayment(String email) {
-		return new Paypal(email);
-	}
-	
-	public Bitcoin createBitcoinPayment(String walletAddress) {
-		return new Bitcoin(walletAddress);
-	}
-	
-	public CreditCard createCreditPayment(String code) {
-		return new CreditCard(code);
-	}
-	
 	
 	// ---------- Getters & Setters ----------
 	

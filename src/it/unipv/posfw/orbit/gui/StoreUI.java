@@ -3,7 +3,7 @@ package it.unipv.posfw.orbit.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import it.unipv.posfw.orbit.client.ClientManager;
+import it.unipv.posfw.orbit.client.UserManager;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -201,7 +201,7 @@ public class StoreUI extends JFrame {
         JButton libraryBtn = createNavButton("LIBRARY");
         
         
-        if(!ClientManager.getInstance().getIsLoggedIn()) {
+        if(!UserManager.getInstance().getIsLoggedIn()) {
         	libraryBtn.setEnabled(false);
         	libraryBtn.setText("");
         	libraryBtn.setOpaque(false);

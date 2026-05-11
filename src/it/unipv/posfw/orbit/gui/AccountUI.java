@@ -3,7 +3,7 @@ package it.unipv.posfw.orbit.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import it.unipv.posfw.orbit.client.ClientManager;
+import it.unipv.posfw.orbit.client.UserManager;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -30,7 +30,7 @@ public class AccountUI extends JFrame {
     //   impostare a `true` se l'utente ha già effettuato il login,
     //   `false` per mostrare la schermata di accesso.
 
-    private boolean isLoggedIn = ClientManager.getInstance().getIsLoggedIn();
+    private boolean isLoggedIn = UserManager.getInstance().getIsLoggedIn();
 
     //   DATI UTENTE — PLACEHOLDER
     //   sostituire con il caricamento reale dal sistema di autenticazione
@@ -136,7 +136,7 @@ public class AccountUI extends JFrame {
             boolean credentialsValid = !nick.isEmpty() && !pass.isEmpty();
 
             if (credentialsValid) {
-            	ClientManager.getInstance().setLoggedIn(true);
+            	UserManager.getInstance().setLoggedIn(true);
                 isLoggedIn      = true;
                 accountNickname = nick;
                 errorLabel.setVisible(false);
@@ -236,7 +236,7 @@ public class AccountUI extends JFrame {
                 "Are you sure you want to logout?",
                 "Logout", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-            	ClientManager.getInstance().setLoggedIn(false);
+            	UserManager.getInstance().setLoggedIn(false);
                 isLoggedIn = false;
                 render();
             }
@@ -290,7 +290,7 @@ public class AccountUI extends JFrame {
         storeBtn.addActionListener(e -> { dispose(); new StoreUI();   });
         libraryBtn.addActionListener(e -> { dispose(); new LibraryUI(); });
         
-        if(!ClientManager.getInstance().getIsLoggedIn()) {
+        if(!UserManager.getInstance().getIsLoggedIn()) {
         	libraryBtn.setEnabled(false);
         	libraryBtn.setText("");
         	libraryBtn.setOpaque(false);
