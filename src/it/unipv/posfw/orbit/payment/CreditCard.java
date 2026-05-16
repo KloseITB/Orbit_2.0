@@ -9,7 +9,7 @@ public class CreditCard implements IPaymentStrategy{
 	
 	// ---------- Constructors ----------
 	
-	public CreditCard(String code) {
+	protected CreditCard(String code) {
 		this.code = code;
 	}
 	

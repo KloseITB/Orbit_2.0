@@ -9,7 +9,7 @@ public class Paypal implements IPaymentStrategy {
 	
 	// ---------- Constructors ----------
 	
-	public Paypal(String email) {
+	protected Paypal(String email) {
 		this.email = email;
 	}
 	

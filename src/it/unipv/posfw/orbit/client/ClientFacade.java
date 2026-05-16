@@ -6,7 +6,6 @@ import it.unipv.posfw.orbit.dao.DAOFactory;
 import it.unipv.posfw.orbit.game.Game;
 import it.unipv.posfw.orbit.game.Review;
 import it.unipv.posfw.orbit.payment.IPaymentStrategy;
-import it.unipv.posfw.orbit.payment.PaymentFactory;
 import it.unipv.posfw.orbit.user.Publisher;
 import it.unipv.posfw.orbit.user.User;
 
@@ -15,7 +14,6 @@ public class ClientFacade {
 	//---------- Variables ----------
 	
 	private UserManager manager = UserManager.getInstance();
-	private PaymentFactory factory = PaymentFactory.getInstance();
 	
 	// ---------- Constructors ----------
 	
@@ -23,9 +21,8 @@ public class ClientFacade {
 	
 	// ---------- Methods ----------
 	
-	public void buyGame(String paymentStrategyKey, String attribute, Game game) {
-		IPaymentStrategy paymentMethod = factory.create(paymentStrategyKey, attribute);
-		paymentMethod.pay(game.getPrice());
+	public void buyGame(IPaymentStrategy paymentStrategy, Game game) {
+		paymentStrategy.pay(game.getPrice());
 		manager.getLoggedUser().getLibrary().addGame(game);
 		// aggiungi una riga con l'id del gioco e l'id dell'utente che l'ha comprato
 	}
@@ -67,7 +64,7 @@ public class ClientFacade {
 			publisher.publishGame(title, genre, price);
 		}
 		else {
-			System.out.println("ERROR: the logged user is not a publisher\n");
+			System.err.println("ERROR: the logged user is not a publisher\n");
 			throw new IllegalAccessException();
 		}
 	}

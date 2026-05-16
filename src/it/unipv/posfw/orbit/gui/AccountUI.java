@@ -36,8 +36,8 @@ public class AccountUI extends JFrame {
     //   sostituire con il caricamento reale dal sistema di autenticazione
     //   Ruoli disponibili: "user" | "publisher"
 
-    private String  accountNickname  = "Player123";
-    private String  accountRole      = "user";       // "user" oppure "publisher"
+    private String  accountNickname  = UserManager.getInstance().getLoggedUser().getNickname();
+    private String  accountRole      = UserManager.getInstance().getLoggedUser().getRole(); // "user" oppure "publisher"
     private int     ownedGamesCount  = 8;
 
 
@@ -286,9 +286,11 @@ public class AccountUI extends JFrame {
 
         JButton storeBtn   = createNavButton("STORE");
         JButton libraryBtn = createNavButton("LIBRARY");
+        JButton publishBtn = createNavButton("PUBLISH");
 
         storeBtn.addActionListener(e -> { dispose(); new StoreUI();   });
         libraryBtn.addActionListener(e -> { dispose(); new LibraryUI(); });
+        publishBtn.addActionListener(e -> { dispose(); new PublishUI(); });
         
         if(!UserManager.getInstance().getIsLoggedIn()) {
         	libraryBtn.setEnabled(false);
@@ -296,9 +298,17 @@ public class AccountUI extends JFrame {
         	libraryBtn.setOpaque(false);
         }
         
+        if(!UserManager.getInstance().getIsLoggedIn()) {
+        	publishBtn.setEnabled(false);
+        	publishBtn.setText("");
+        	publishBtn.setOpaque(false);
+        }
+        
         panel.add(storeBtn);
         panel.add(Box.createVerticalStrut(14));
         panel.add(libraryBtn);
+        panel.add(Box.createVerticalStrut(14));
+        panel.add(publishBtn);
         panel.add(Box.createVerticalGlue());
 
         return panel;

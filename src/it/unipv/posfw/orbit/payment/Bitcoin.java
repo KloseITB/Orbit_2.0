@@ -9,7 +9,7 @@ public class Bitcoin implements IPaymentStrategy {
 	
 	// ---------- Constructors ----------
 	
-	public Bitcoin(String walletAddress) {
+	protected Bitcoin(String walletAddress) {
 		this.walletAddress = walletAddress;
 	}
 	
