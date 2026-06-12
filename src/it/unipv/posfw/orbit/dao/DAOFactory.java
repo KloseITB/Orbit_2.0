@@ -13,6 +13,12 @@ public class DAOFactory {
     
     private static DAOFactory instance;
     
+    // Cached instances, we create them once
+    private final IUserDAO userDAO = new UserDAO();
+    private final IGameDAO gameDAO = new GameDAO();
+    private final IReviewDAO reviewDAO = new ReviewDAO();
+    private final ILibraryDAO libraryDAO = new LibraryDAO();
+    
     private DAOFactory() {}
     
     public static DAOFactory getInstance() {
@@ -23,18 +29,18 @@ public class DAOFactory {
     }
     
     public IUserDAO getUserDAO() {
-        return new UserDAO();
+        return userDAO;
     }
     
     public IGameDAO getGameDAO() {
-        return new GameDAO();
+        return gameDAO;
     }
     
     public IReviewDAO getReviewDAO() {
-        return new ReviewDAO();
+        return reviewDAO;
     }
     
     public ILibraryDAO getLibraryDAO() {
-        return new LibraryDAO();
+        return libraryDAO);
     }
 }

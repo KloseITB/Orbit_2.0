@@ -1,8 +1,10 @@
 package it.unipv.posfw.orbit.dao.impl;
 
+import it.unipv.posfw.orbit.dao.DAOFactory;
 import it.unipv.posfw.orbit.dao.DBConnection;
 import it.unipv.posfw.orbit.dao.IReviewDAO;
 import it.unipv.posfw.orbit.game.Review;
+import it.unipv.posfw.orbit.user.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,13 +16,19 @@ import java.util.List;
 public class ReviewDAO implements IReviewDAO {
 
     @Override
-    public boolean addReview(Review review) {
+    public boolean addReview(Review review, String gameId) {
         String query = "INSERT INTO Reviews (userID, gameID, rating) VALUES (?, ?, ?)";
+        
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             
+        	// Fetch the user ID directly from the reviewer object inside the Review record
             pstmt.setString(1, review.reviewer().getID());
-            pstmt.setString(2, review.game().getID());
+            
+            // The gameID must be passed as an additional parameter since it's not in the Review record
+            pstmt.setString(2, gameId);
+            
+            // Fetch the rating from the Review record
             pstmt.setInt(3, review.rating());
             
             return pstmt.executeUpdate() > 0;
@@ -34,6 +42,7 @@ public class ReviewDAO implements IReviewDAO {
     public List<Review> getReviewsByGameId(String gameId) {
         List<Review> reviews = new ArrayList<>();
         String query = "SELECT * FROM Reviews WHERE gameID = ?";
+        
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             
@@ -41,7 +50,19 @@ public class ReviewDAO implements IReviewDAO {
             ResultSet rs = pstmt.executeQuery();
             
             while (rs.next()) {
-                reviews.add(new Review(/*User*/ rs.getString("userID"), /*Game*/ rs.getString("gameID"), rs.getInt("rating")));
+            	// Retrieve the userID from the database result
+            	int userID = rs.getInt("userID");
+            	
+            	// Fetch the full User object using the DAOFactory and UserDAO
+            	User reviewer = DAOFactory.getInstance().getUserDAO().getUserById(userID);
+            	
+            	// Ensure the user exist before creating the Review Object
+            	if (reviewer != null){
+            		int rating = rs.getInt("rating");
+            		
+            		// Initiate the Review record correctly using the USer object and the rating
+            		reviews.add(new Review(reviewer, rating));
+            	}
             }
         } catch (SQLException e) {
             e.printStackTrace();
