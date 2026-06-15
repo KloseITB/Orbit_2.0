@@ -36,11 +36,16 @@ public class AccountUI extends JFrame {
     //   sostituire con il caricamento reale dal sistema di autenticazione
     //   Ruoli disponibili: "user" | "publisher"
 
-    private String  accountNickname  = UserManager.getInstance().getLoggedUser().getNickname();
-    private String  accountRole      = UserManager.getInstance().getLoggedUser().getRole(); // "user" oppure "publisher"
+    private String  accountNickname;
+    private String  accountRole;
     private int     ownedGamesCount  = 8;
 
-
+    private void Setup() {
+    	if(UserManager.getInstance().getLoggedUser() != null) {
+    	    accountNickname  = UserManager.getInstance().getLoggedUser().getNickname();
+    	    accountRole      = UserManager.getInstance().getLoggedUser().getRole();
+    	}
+    }
 
     public AccountUI() {
         setTitle("Orbit — Account");

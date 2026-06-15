@@ -41,6 +41,6 @@ public class DAOFactory {
     }
     
     public ILibraryDAO getLibraryDAO() {
-        return libraryDAO);
+        return libraryDAO;
     }
 }
