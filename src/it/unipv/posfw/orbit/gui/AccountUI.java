@@ -27,20 +27,15 @@ public class AccountUI extends JFrame {
     private static final Color BORDER_COLOR  = new Color(75, 68, 105);
     private static final Color DANGER_RED    = new Color(210, 70, 70);
     private static final Color DANGER_HOVER  = new Color(240, 90, 90);
-    
-    //   STATO DI LOGIN — DA COLLEGARE AL SISTEMA DI AUTENTICAZIONE
-    //   impostare a `true` se l'utente ha già effettuato il login,
-    //   `false` per mostrare la schermata di accesso.
 
     private boolean isLoggedIn = UserManager.getInstance().getIsLoggedIn();
 
-    //   DATI UTENTE — PLACEHOLDER
-    //   sostituire con il caricamento reale dal sistema di autenticazione
-    //   Ruoli disponibili: "user" | "publisher"
 
     private String  accountNickname;
     private String  accountRole;
     private int     ownedGamesCount  = 0;
+    private boolean isPublisher = false;
+    
     private ClientFacade facade = new ClientFacade();
 
     private void Setup() {
@@ -48,6 +43,10 @@ public class AccountUI extends JFrame {
     	    accountNickname  = UserManager.getInstance().getLoggedUser().getNickname();
     	    accountRole      = UserManager.getInstance().getLoggedUser().getRole().toString();
     	    ownedGamesCount  = UserManager.getInstance().getLoggedUser().getLibrary().getGames().size();
+    	    
+    	    if(UserManager.getInstance().getLoggedUser().getRole() == Role.Publisher) {
+    	    	isPublisher = true;
+    	    }
     	}
     }
 
@@ -233,8 +232,7 @@ public class AccountUI extends JFrame {
         infoPanel.setOpaque(false);
         infoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         addInfoRow(infoPanel, "Nickname",         accountNickname,            0);
-        addInfoRow(infoPanel, "Role",             roleDisplay,                1);
-        addInfoRow(infoPanel, "Games Owned", String.valueOf(ownedGamesCount), 2);
+        addInfoRow(infoPanel, "Games Owned", String.valueOf(ownedGamesCount), 1);
 
         // Logout
         JButton logoutBtn = new JButton("Logout");
@@ -318,7 +316,7 @@ public class AccountUI extends JFrame {
         	libraryBtn.setOpaque(false);
         }
         
-        if(!UserManager.getInstance().getIsLoggedIn()) {
+        if(!UserManager.getInstance().getIsLoggedIn() || !isPublisher) {
         	publishBtn.setEnabled(false);
         	publishBtn.setText("");
         	publishBtn.setOpaque(false);

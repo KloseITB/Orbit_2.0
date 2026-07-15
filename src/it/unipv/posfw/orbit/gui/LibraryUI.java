@@ -2,10 +2,15 @@ package it.unipv.posfw.orbit.gui;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import it.unipv.posfw.orbit.client.UserManager;
+import it.unipv.posfw.orbit.game.Game;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 @SuppressWarnings("serial")
 public class LibraryUI extends JFrame {
@@ -28,16 +33,7 @@ public class LibraryUI extends JFrame {
     //   Sostituire questo array con il caricamento dinamico dei giochi
     //   acquistati dall'utente
 
-    private static final String[] LIBRARY_GAMES = {
-        "Cyberpunk 2077",
-        "The Witcher 3: Wild Hunt",
-        "Hollow Knight",
-        "Hades",
-        "Celeste",
-        "Portal 2",
-        "Stardew Valley",
-        "Dead Cells",
-    };
+    private final LinkedList<Game> ownedGames = UserManager.getInstance().getLoggedUser().getLibrary().getGames();
     
     //------------------------------ Constructor ------------------------------
 
@@ -95,9 +91,9 @@ public class LibraryUI extends JFrame {
         listPanel.setBackground(PANEL_BG);
         listPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 
-        for (int i = 0; i < LIBRARY_GAMES.length; i++) {
-            listPanel.add(createGameRow(LIBRARY_GAMES[i], i));
-            if (i < LIBRARY_GAMES.length - 1) {
+        for (int i = 0; i < ownedGames.size(); i++) {
+            listPanel.add(createGameRow(ownedGames.get(i).getTitle(), i));
+            if (i < ownedGames.size() - 1) {
                 listPanel.add(Box.createVerticalStrut(2));
             }
         }
