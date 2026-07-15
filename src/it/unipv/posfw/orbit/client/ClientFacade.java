@@ -33,9 +33,28 @@ public class ClientFacade {
 		// salvare la review nel database
 	}
 	
-	public void login(User user) {
-		manager.setLoggedUser(user);
-		manager.setLoggedIn(true);
+	public User login(String nickname, String password) {
+		
+		User user = DAOFactory.getInstance().getUserDAO().getUserByNickname(nickname);
+		
+		if (user != null == user.getPassword().equals(password)) {
+			
+			// recover users's library from the DB
+			List<Game> userGames = DAOFactory.getInstance().getLibraryDAO().getLibraryByUserId(user.getUserID());
+			// populate local memory
+			for (Game game : userGames) {
+				user.getLibrary().addGame(game);
+			}
+			
+			// set user as logged in
+			manager.setLoggedUser(user);
+			manager.setLoggedIn(true);
+			
+			return user; // login successful
+		}
+		
+		return null; // login failed
+		
 	}
 	
 	public void logout() {
@@ -43,11 +62,20 @@ public class ClientFacade {
 		manager.setLoggedIn(false);
 	}
 	
-	public void signup(String nickname, String password) {
-		User user = new User(nickname, password);
-		// aggiungi l'utente al database
-		manager.setLoggedUser(user);
-		manager.setLoggedIn(true);
+	public boolean signup(String nickname, String password, boolean isPublisher) {
+		
+		User newUser = isPublisher ? new Publisher(nickname, password) : new User(nickname, password);
+		
+		// we try to add the user to the DB, we get false if the nickname already exist
+		boolean success = DAOFactory.getInstance().getUserDAO().addUser(newUser, isPublisher);
+		
+		if (success) {
+			// if the registration is successful it does the login automatically
+			manager.setLoggedUser(newUser);
+			manager.setLoggedIn(true);
+			return true;
+		}
+		return false;
 	}
 	
 	public List<Game> getCatalog() {

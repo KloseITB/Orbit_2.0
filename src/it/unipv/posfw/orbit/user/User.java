@@ -6,7 +6,7 @@ public class User {
 	
 	// ---------- Variables ----------
 	
-	private String userID = "0";
+	private int userID;
 	private String nickname;
 	private String password;
 	private Library library;
@@ -23,8 +23,11 @@ public class User {
 	}
 	
 	// ---------- Getters & Setters ----------
+	public void setUserID(int userID) {
+		this.userID = userID;
+	}
 	
-	public String getID() {
+	public int getUserID() {
 		return this.userID;
 	}
 	
