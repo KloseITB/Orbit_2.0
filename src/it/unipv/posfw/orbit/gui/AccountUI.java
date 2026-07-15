@@ -1,5 +1,6 @@
 package it.unipv.posfw.orbit.gui;
 
+import it.unipv.posfw.orbit.client.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -9,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import it.unipv.posfw.orbit.user.*;
 
 @SuppressWarnings("serial")
 public class AccountUI extends JFrame {
@@ -39,6 +41,7 @@ public class AccountUI extends JFrame {
     private String  accountNickname;
     private String  accountRole;
     private int     ownedGamesCount  = 0;
+    private ClientFacade facade = new ClientFacade();
 
     private void Setup() {
     	if(UserManager.getInstance().getLoggedUser() != null) {
@@ -64,6 +67,8 @@ public class AccountUI extends JFrame {
         setMinimumSize(new Dimension(750, 480));
         setLocationRelativeTo(null);
         setBackground(BG_DARK);
+        
+        Setup();
 
         render();
         setVisible(true);
@@ -137,17 +142,26 @@ public class AccountUI extends JFrame {
         loginBtn.addActionListener(e -> {
             String nick = nickField.getText().trim();
             String pass = new String(passField.getPassword()).trim();
+            
+            // avoid calling the db if the fields are empty
+            if (nick.isEmpty() || pass.isEmpty()) {
+                errorLabel.setText("Inserisci nickname e password.");
+                errorLabel.setVisible(true);
+                return;
+            }
 
-            //   sostituire la condizione qui sotto con la vera verifica delle credenziali 
-            boolean credentialsValid = !nick.isEmpty() && !pass.isEmpty();
+            // credential check using the facade
+            User loggedUser = facade.login(nick, pass);
 
-            if (credentialsValid) {
-            	UserManager.getInstance().setLoggedIn(true);
-                isLoggedIn      = true;
-                accountNickname = nick;
+            if (loggedUser != null) {
+                // login successful, ClientFacade has already set UserManager
+                isLoggedIn = true;
+                Setup(); // update UI
                 errorLabel.setVisible(false);
-                render();
+                render(); // reload to show the user profile
             } else {
+                // login unsuccessful
+                errorLabel.setText("Nickname e/o password errati.");
                 errorLabel.setVisible(true);
                 passField.setText("");
             }
@@ -198,8 +212,8 @@ public class AccountUI extends JFrame {
         
         // sistema di riconoscimento ruolo (Work in progress)
         
-        String roleDisplay = accountRole.equals("publisher") ? "Publisher" : "User";
-        Color  roleBg      = accountRole.equals("publisher")
+        String roleDisplay = accountRole.equalsIgnoreCase("publisher") ? "Publisher" : "User";
+        Color  roleBg      = accountRole.equalsIgnoreCase("publisher")
                              ? new Color(100, 60, 180)
                              : new Color(50, 100, 160);
         JLabel roleBadge = new JLabel(roleDisplay.toUpperCase(), SwingConstants.CENTER);
