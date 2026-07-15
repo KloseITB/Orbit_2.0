@@ -15,7 +15,7 @@ public class Publisher extends User {
 	public Publisher(String nickname, String password) {
 		super(nickname, password);
 		this.publishedGames = new LinkedList<Game>();
-		super.role = "Publisher";
+		super.role = Role.Publisher;
 	}
 	
 	// ---------- Methods ----------

@@ -38,12 +38,13 @@ public class AccountUI extends JFrame {
 
     private String  accountNickname;
     private String  accountRole;
-    private int     ownedGamesCount  = 8;
+    private int     ownedGamesCount  = 0;
 
     private void Setup() {
     	if(UserManager.getInstance().getLoggedUser() != null) {
     	    accountNickname  = UserManager.getInstance().getLoggedUser().getNickname();
-    	    accountRole      = UserManager.getInstance().getLoggedUser().getRole();
+    	    accountRole      = UserManager.getInstance().getLoggedUser().getRole().toString();
+    	    ownedGamesCount  = UserManager.getInstance().getLoggedUser().getLibrary().getGames().size();
     	}
     }
 

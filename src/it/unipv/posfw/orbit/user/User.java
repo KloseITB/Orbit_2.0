@@ -10,7 +10,7 @@ public class User {
 	private String nickname;
 	private String password;
 	private Library library;
-	protected String role = "User";
+	protected Role role = Role.User;
 	
 	// ---------- Constructors ----------
 	
@@ -43,7 +43,7 @@ public class User {
 		return this.library;
 	}
 	
-	public String getRole() {
+	public Role getRole() {
 		return role;
 	}
 	
