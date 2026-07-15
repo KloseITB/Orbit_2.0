@@ -17,7 +17,7 @@ public class CreditCard implements IPaymentStrategy{
 	
 	@Override
 	public void pay(float amount) {
-		System.out.println("log: " + "paid " + amount + "euros with a Credit Card\n");
+		System.out.println("log: " + "paid " + amount + " € using a Credit Card\n");
 	}
 
 }

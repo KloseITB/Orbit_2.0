@@ -5,8 +5,15 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
+import it.unipv.posfw.orbit.client.ClientFacade;
 import it.unipv.posfw.orbit.client.UserManager;
+import it.unipv.posfw.orbit.dao.impl.LibraryDAO;
 import it.unipv.posfw.orbit.game.Game;
+import it.unipv.posfw.orbit.payment.BitcoinFactory;
+import it.unipv.posfw.orbit.payment.CreditCardFactory;
+import it.unipv.posfw.orbit.payment.IPaymentStrategy;
+import it.unipv.posfw.orbit.payment.PaypalFactory;
+import it.unipv.posfw.orbit.user.User;
 
 import java.awt.*;
 import java.awt.event.FocusEvent;
@@ -24,7 +31,12 @@ public class CheckoutUI extends JFrame {
     private static final Color ACCENT_YELLOW = new Color(230, 175, 30);
     private static final Color ACCENT_HOVER  = new Color(255, 200, 50);
     private static final Color TEXT_COLOR    = new Color(220, 215, 235);
-
+    
+    private JComboBox<String> paymentCombo;
+    private JTextField bitcoinField;
+    private JTextField creditCardField;
+    private JTextField paypalField;
+    
     public CheckoutUI(Game game) {
         setTitle("Orbit - Purchase Game");
         
@@ -92,19 +104,22 @@ public class CheckoutUI extends JFrame {
         styleComboBox(paymentCombo);
         formPanel.add(paymentCombo);
         formPanel.add(Box.createVerticalStrut(20));
-
+        
         // Dynamic Input Panel using CardLayout
         CardLayout cardLayout = new CardLayout();
         JPanel dynamicInputsPanel = new JPanel(cardLayout);
         dynamicInputsPanel.setOpaque(false);
         dynamicInputsPanel.setMaximumSize(new Dimension(300, 70));
 
-        // 1. Bitcoin Card
-        JPanel bitcoinPanel = createInputCard("Wallet address");
-        // 2. CreditCard Card
-        JPanel creditCardPanel = createInputCard("Code");
-        // 3. Paypal Card
-        JPanel paypalPanel = createInputCard("Email");
+     // Inizializza i campi di testo (usando le variabili globali dichiarate in alto)
+        bitcoinField = createTextField();
+        creditCardField = createTextField();
+        paypalField = createTextField();
+
+        // Associa i campi di testo alle rispettive schede di input
+        JPanel bitcoinPanel = createInputCard("Wallet address", bitcoinField);
+        JPanel creditCardPanel = createInputCard("Code", creditCardField);
+        JPanel paypalPanel = createInputCard("Email", paypalField);
 
         dynamicInputsPanel.add(bitcoinPanel, "Bitcoin");
         dynamicInputsPanel.add(creditCardPanel, "CreditCard");
@@ -112,7 +127,7 @@ public class CheckoutUI extends JFrame {
 
         formPanel.add(dynamicInputsPanel);
         formPanel.add(Box.createVerticalStrut(40));
-
+        
         // Action Listener to switch cards when dropdown selection changes
         paymentCombo.addActionListener(e -> {
             String selectedMethod = (String) paymentCombo.getSelectedItem();
@@ -134,11 +149,27 @@ public class CheckoutUI extends JFrame {
         JButton btnPurchase = createStyledButton("PURCHASE", 120, 40);
         btnPurchase.addActionListener(e -> {
             
-            JOptionPane.showMessageDialog(this
-            		, game.getTitle() + " was added to your library"
-            		, "Purchase successful"
-            		, JOptionPane.INFORMATION_MESSAGE);
-            UserManager.getInstance().getLoggedUser().getLibrary().addGame(game);
+            String selectedMethod = (String) paymentCombo.getSelectedItem();
+            String userCredential = "";
+            IPaymentStrategy paymentStrategy = null;
+            
+            switch (selectedMethod) {
+                case "Bitcoin":
+                    userCredential = bitcoinField.getText();
+                    paymentStrategy = BitcoinFactory.getInstance().create(userCredential);
+                    break;
+                case "CreditCard":
+                    userCredential = creditCardField.getText();
+                    paymentStrategy = CreditCardFactory.getInstance().create(userCredential);
+                    break;
+                case "Paypal":
+                    userCredential = paypalField.getText();
+                    paymentStrategy = PaypalFactory.getInstance().create(userCredential);
+                    break;
+            }
+            
+            ClientFacade.getInstance().buyGame(paymentStrategy, game);
+            
             });
 
         buttonPanel.add(btnCancel);
@@ -166,17 +197,16 @@ public class CheckoutUI extends JFrame {
         return wrapper;
     }
     
-    private JPanel createInputCard(String labelText) {
+    private JPanel createInputCard(String labelText, JTextField textField) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
 
         JLabel label = createCenteredLabel(labelText);
-        JTextField textField = createTextField();
 
         panel.add(label);
         panel.add(Box.createVerticalStrut(5));
-        panel.add(textField);
+        panel.add(textField); // Usa il campo passato come parametro
 
         return panel;
     }

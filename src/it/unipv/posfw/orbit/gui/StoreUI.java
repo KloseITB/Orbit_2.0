@@ -116,8 +116,7 @@ public class StoreUI extends JFrame {
         listPanel.setBackground(PANEL_BG);
         listPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
         
-        ClientFacade clientFacade = new ClientFacade();
-        List<Game> GAMES = clientFacade.getCatalog();        
+        List<Game> GAMES = ClientFacade.getInstance().getCatalog();        
 
         for (int i = 0; i < GAMES.size(); i++) {
         	Game game = GAMES.get(i);
@@ -178,7 +177,8 @@ public class StoreUI extends JFrame {
         
         JButton buyBtn = createStyledButton("BUY", 65, 30);
         buyBtn.addActionListener(e -> {
-                new CheckoutUI(game);
+        	dispose();
+            new CheckoutUI(game);
         });
 
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));

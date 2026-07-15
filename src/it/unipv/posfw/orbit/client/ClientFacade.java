@@ -3,6 +3,7 @@ package it.unipv.posfw.orbit.client;
 import java.util.List;
 
 import it.unipv.posfw.orbit.dao.DAOFactory;
+import it.unipv.posfw.orbit.dao.impl.LibraryDAO;
 import it.unipv.posfw.orbit.game.Game;
 import it.unipv.posfw.orbit.game.Review;
 import it.unipv.posfw.orbit.payment.IPaymentStrategy;
@@ -14,17 +15,25 @@ public class ClientFacade {
 	//---------- Variables ----------
 	
 	private UserManager manager = UserManager.getInstance();
+	private static ClientFacade instance;
 	
-	// ---------- Constructors ----------
+	// ---------- Constructor ----------
 	
-	public ClientFacade() {}
+	private ClientFacade() {}
 	
 	// ---------- Methods ----------
+	
+	public static ClientFacade getInstance() {
+		if(instance == null) {
+			instance = new ClientFacade();
+		}
+		return instance;
+	}
 	
 	public void buyGame(IPaymentStrategy paymentStrategy, Game game) {
 		paymentStrategy.pay(game.getPrice());
 		manager.getLoggedUser().getLibrary().addGame(game);
-		// aggiungi una riga con l'id del gioco e l'id dell'utente che l'ha comprato
+		addGameToLibrary(UserManager.getInstance().getLoggedUser(), game);
 	}
 	
 	public void reviewGame(Game game, int vote) {
@@ -95,5 +104,11 @@ public class ClientFacade {
 			System.err.println("ERROR: the logged user is not a publisher\n");
 			throw new IllegalAccessException();
 		}
+	}
+	
+	public void addGameToLibrary(User user, Game game) {
+		user.getLibrary().addGame(game);
+		LibraryDAO ld = new LibraryDAO();
+		ld.addGameToLibrary(user.getID(), game.getID());
 	}
 }

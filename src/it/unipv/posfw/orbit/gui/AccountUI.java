@@ -36,7 +36,7 @@ public class AccountUI extends JFrame {
     private int     ownedGamesCount  = 0;
     private boolean isPublisher = false;
     
-    private ClientFacade facade = new ClientFacade();
+    private ClientFacade facade = ClientFacade.getInstance();
 
     private void Setup() {
     	if(UserManager.getInstance().getLoggedUser() != null) {
@@ -160,7 +160,7 @@ public class AccountUI extends JFrame {
                 render(); // reload to show the user profile
             } else {
                 // login unsuccessful
-                errorLabel.setText("Nickname e/o password errati.");
+                errorLabel.setText("Nickname and/or password incorrect.");
                 errorLabel.setVisible(true);
                 passField.setText("");
             }

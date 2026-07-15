@@ -17,7 +17,7 @@ public class Bitcoin implements IPaymentStrategy {
 	
 	@Override
 	public void pay(float amount) {
-		System.out.println("log: " + "paid " + amount + "euros with Bitcoins\n");
+		System.out.println("log: " + "paid " + amount + " € using Bitcoins\n");
 	}
 
 }

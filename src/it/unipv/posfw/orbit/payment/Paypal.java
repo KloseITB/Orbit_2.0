@@ -17,7 +17,7 @@ public class Paypal implements IPaymentStrategy {
 	
 	@Override
 	public void pay(float amount) {
-		System.out.println("log: " + "paid " + amount + "euros with Paypal\n");
+		System.out.println("log: " + "paid " + amount + " € via Paypal\n");
 	}
 
 }
