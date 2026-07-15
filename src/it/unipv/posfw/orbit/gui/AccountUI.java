@@ -117,13 +117,13 @@ public class AccountUI extends JFrame {
             BorderFactory.createEmptyBorder(36, 44, 36, 44)
         ));
 
-        JLabel title    = centeredLabel("Login to your account", 20, Font.BOLD, TEXT_LIGHT);
-        JLabel subtitle = centeredLabel("Insert your credentials to continue", 13, Font.PLAIN, TEXT_DIM);
+        JLabel title    = centeredLabel("Login to your account", 22, Font.BOLD, TEXT_LIGHT);
+        JLabel subtitle = centeredLabel("Insert your credentials to continue", 14, Font.PLAIN, TEXT_DIM);
 
-        JLabel    nickLabel = leftLabel("Nickname", 13, Font.PLAIN, TEXT_DIM);
+        JLabel    nickLabel = centeredLabel("Nickname", 16, Font.BOLD, TEXT_LIGHT);
         JTextField nickField = createTextField(280, 38);
 
-        JLabel        passLabel = leftLabel("Password", 13, Font.PLAIN, TEXT_DIM);
+        JLabel        passLabel = centeredLabel("Password", 16, Font.BOLD, TEXT_LIGHT);
         JPasswordField passField = new JPasswordField();
         passField.setPreferredSize(new Dimension(280, 38));
         passField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
@@ -132,7 +132,7 @@ public class AccountUI extends JFrame {
         JLabel errorLabel = centeredLabel("Nickname and/or password incorrect.", 12, Font.PLAIN, DANGER_RED);
         errorLabel.setVisible(false);
 
-        JButton loginBtn = createAccentButton("LOGIN", 280, 42);
+        JButton loginBtn = createAccentButton("LOGIN", 280, 40);
         loginBtn.addActionListener(e -> {
             String nick = nickField.getText().trim();
             String pass = new String(passField.getPassword()).trim();
@@ -323,7 +323,7 @@ public class AccountUI extends JFrame {
 
     private JButton createNavButton(String text) {
         JButton btn = new JButton(text);
-        btn.setPreferredSize(new Dimension(148, 58));
+        btn.setPreferredSize(new Dimension(148, 40));
         btn.setMaximumSize(new Dimension(148, 58));
         btn.setBackground(ACCENT_YELLOW);
         btn.setForeground(new Color(20, 20, 20));
@@ -346,7 +346,7 @@ public class AccountUI extends JFrame {
         btn.setAlignmentX(Component.CENTER_ALIGNMENT);
         btn.setBackground(ACCENT_YELLOW);
         btn.setForeground(new Color(20, 20, 20));
-        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 16));
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -395,14 +395,6 @@ public class AccountUI extends JFrame {
         l.setFont(new Font("Segoe UI", style, size));
         l.setForeground(color);
         l.setAlignmentX(Component.CENTER_ALIGNMENT);
-        return l;
-    }
-
-    private JLabel leftLabel(String text, int size, int style, Color color) {
-        JLabel l = new JLabel(text);
-        l.setFont(new Font("Segoe UI", style, size));
-        l.setForeground(color);
-        l.setAlignmentX(Component.LEFT_ALIGNMENT);
         return l;
     }
 }

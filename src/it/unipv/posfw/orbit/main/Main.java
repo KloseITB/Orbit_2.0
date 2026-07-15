@@ -3,7 +3,7 @@ package it.unipv.posfw.orbit.main;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import it.unipv.posfw.orbit.gui.LoginUI;
+import it.unipv.posfw.orbit.gui.PublishUI;
 import it.unipv.posfw.orbit.gui.StoreUI;
 
 public class Main {
@@ -17,6 +17,6 @@ public class Main {
         	System.err.println("ERROR: Failed to initialize the GUI");
         }
 
-        SwingUtilities.invokeLater(LoginUI::new);
+        SwingUtilities.invokeLater(PublishUI/*StoreUI*/::new);
     }
 }

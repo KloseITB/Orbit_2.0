@@ -162,6 +162,7 @@ public class StoreUI extends JFrame {
         priceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         // Buy button
+        
         JButton buyBtn = createStyledButton("BUY", 65, 30);
         buyBtn.addActionListener(e ->
             JOptionPane.showMessageDialog(this,
@@ -174,7 +175,10 @@ public class StoreUI extends JFrame {
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         rightPanel.setOpaque(false);
         rightPanel.add(priceLabel);
-        rightPanel.add(buyBtn);
+        
+        if(UserManager.getInstance().getIsLoggedIn()) {
+        	rightPanel.add(buyBtn);
+        }
 
         row.add(titleLabel, BorderLayout.CENTER);
         row.add(rightPanel,  BorderLayout.EAST);
@@ -230,7 +234,7 @@ public class StoreUI extends JFrame {
 
     private JButton createNavButton(String text) {
         JButton btn = new JButton(text);
-        btn.setPreferredSize(new Dimension(148, 58));
+        btn.setPreferredSize(new Dimension(148, 40));
         btn.setMaximumSize (new Dimension(148, 58));
         btn.setBackground(ACCENT_YELLOW);
         btn.setForeground(new Color(20, 20, 20));
