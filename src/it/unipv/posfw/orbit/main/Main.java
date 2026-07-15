@@ -17,6 +17,6 @@ public class Main {
         	System.err.println("ERROR: Failed to initialize the GUI");
         }
 
-        SwingUtilities.invokeLater(PublishUI/*StoreUI*/::new);
+        SwingUtilities.invokeLater(StoreUI::new);
     }
 }

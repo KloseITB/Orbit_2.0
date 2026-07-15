@@ -16,17 +16,17 @@ import java.util.List;
 public class ReviewDAO implements IReviewDAO {
 
     @Override
-    public boolean addReview(Review review, String gameId) {
+    public boolean addReview(Review review, int gameId) {
         String query = "INSERT INTO Reviews (userID, gameID, rating) VALUES (?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             
         	// Fetch the user ID directly from the reviewer object inside the Review record
-            pstmt.setString(1, review.reviewer().getID());
+            pstmt.setInt(1, review.reviewer().getID());
             
             // The gameID must be passed as an additional parameter since it's not in the Review record
-            pstmt.setString(2, gameId);
+            pstmt.setInt(2, gameId);
             
             // Fetch the rating from the Review record
             pstmt.setInt(3, review.rating());
@@ -39,14 +39,14 @@ public class ReviewDAO implements IReviewDAO {
     }
 
     @Override
-    public List<Review> getReviewsByGameId(String gameId) {
+    public List<Review> getReviewsByGameId(int gameId) {
         List<Review> reviews = new ArrayList<>();
         String query = "SELECT * FROM Reviews WHERE gameID = ?";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             
-            pstmt.setString(1, gameId);
+            pstmt.setInt(1, gameId);
             ResultSet rs = pstmt.executeQuery();
             
             while (rs.next()) {

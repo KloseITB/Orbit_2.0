@@ -23,11 +23,11 @@ public class User {
 	}
 	
 	// ---------- Getters & Setters ----------
-	public void setUserID(int userID) {
+	public void setID(int userID) {
 		this.userID = userID;
 	}
 	
-	public int getUserID() {
+	public int getID() {
 		return this.userID;
 	}
 	

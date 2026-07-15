@@ -6,7 +6,7 @@ import java.util.List;
 public interface IReviewDAO {
     
 	// It has the gameId parameter to properly link the review to a game in the database
-	boolean addReview(Review review, String gameId);
+	boolean addReview(Review review, int gameId);
     
-	List<Review> getReviewsByGameId(String gameId);
+	List<Review> getReviewsByGameId(int gameId);
 }

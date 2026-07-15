@@ -40,7 +40,7 @@ public class ClientFacade {
 		if (user != null == user.getPassword().equals(password)) {
 			
 			// recover users's library from the DB
-			List<Game> userGames = DAOFactory.getInstance().getLibraryDAO().getLibraryByUserId(user.getUserID());
+			List<Game> userGames = DAOFactory.getInstance().getLibraryDAO().getLibraryByUserId(user.getID());
 			// populate local memory
 			for (Game game : userGames) {
 				user.getLibrary().addGame(game);

@@ -6,7 +6,7 @@ public class Game {
 	
 	// ---------- Variables ----------
 	
-	private String gameID = "0";
+	private int gameID = 0;
 	private String title;
 	private String genre;
 	private float price;
@@ -30,7 +30,7 @@ public class Game {
 	
 	// ---------- Getters & Setters ----------
 	
-	public String getID() {
+	public int getID() {
 		return this.gameID;
 	}
 	
