@@ -71,4 +71,28 @@ public class LibraryDAO implements ILibraryDAO {
             return false;
         }
     }
+    
+    @Override
+    public boolean removeGameFromLibrary(int userId, int gameId) {
+        // remove selected game from a specific user
+        String query = "DELETE FROM Library WHERE userID = ? AND gameID = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, gameId);
+            
+            // executeUpdate return the number of modified rows
+            int rowsAffected = pstmt.executeUpdate();
+            
+            // if row > 0 than the removal was successful
+            return rowsAffected > 0;
+            
+        } catch (SQLException e) {
+            System.err.println("Impossible to remove the game from user's library " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
