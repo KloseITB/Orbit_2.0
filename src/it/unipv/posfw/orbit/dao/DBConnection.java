@@ -7,7 +7,7 @@ import java.sql.SQLException;
 // Singleton class, establish and maintain connection to the database
 
 public class DBConnection {
-    private static final String URL = "jdbc:sqlite:orbit_database.db"; // database directory
+    private static final String URL = "jdbc:sqlite:res/database/orbit_database.db"; // database directory
     private static Connection connection = null;
 
     private DBConnection() {}
