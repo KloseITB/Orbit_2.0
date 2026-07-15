@@ -49,11 +49,13 @@ public class UserDAO implements IUserDAO {
             
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
+            	int userid = rs.getInt("userID");
                 String nick = rs.getString("nickname");
                 String pass = rs.getString("password");
                 boolean isPub = rs.getInt("is_publisher") == 1;
                 
                 User user = isPub ? new Publisher(nick, pass) : new User(nick, pass);
+                user.setID(userid);
                 return user;
             }
         } catch (SQLException e) {

@@ -6,5 +6,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/home/ema/Documents/GitHub/Orbit_2.0/lib/sqlite-jdbc-3.51.2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

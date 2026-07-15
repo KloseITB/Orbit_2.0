@@ -37,7 +37,7 @@ public class ClientFacade {
 		
 		User user = DAOFactory.getInstance().getUserDAO().getUserByNickname(nickname);
 		
-		if (user != null == user.getPassword().equals(password)) {
+		if (user != null && user.getPassword().equals(password)) {
 			
 			// recover users's library from the DB
 			List<Game> userGames = DAOFactory.getInstance().getLibraryDAO().getLibraryByUserId(user.getID());

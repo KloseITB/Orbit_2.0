@@ -3,17 +3,16 @@ package it.unipv.posfw.orbit.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import it.unipv.posfw.orbit.client.ClientFacade;
 import it.unipv.posfw.orbit.client.UserManager;
-import it.unipv.posfw.orbit.dao.impl.GameDAO;
-import it.unipv.posfw.orbit.game.Game;
+import it.unipv.posfw.orbit.client.ClientFacade;
+
+import it.unipv.posfw.orbit.game.*;
 
 import java.util.List;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class StoreUI extends JFrame {
@@ -32,7 +31,28 @@ public class StoreUI extends JFrame {
     private static final Color SCROLLBAR_BG  = new Color(35, 32, 50);
 
     // dati placeholder del catalogo
-    private final List<Game> GameList = new ClientFacade().getCatalog();
+    
+    
+//    private static final String[][] GAMES = {
+//        {"Cyberpunk 2077",              "59,99 €"},
+//        {"The Witcher 3: Wild Hunt",     "29,99 €"},
+//        {"Red Dead Redemption 2",        "49,99 €"},
+//        {"Elden Ring",                   "59,99 €"},
+//        {"Dark Souls III",               "39,99 €"},
+//        {"Hollow Knight",                "14,99 €"},
+//        {"Stardew Valley",                "13,99 €"},
+//        {"Hades",                        "24,99 €"},
+//        {"Celeste",                      "19,99 €"},
+//        {"Portal 2",                      "9,99 €"},
+//        {"DOOM Eternal",                 "39,99 €"},
+//        {"Ori and the Blind Forest",     "19,99 €"},
+//        {"Terraria",                      "9,99 €"},
+//        {"Minecraft Java Edition",       "26,95 €"},
+//        {"GTA V",                        "29,99 €"},
+//        {"Sekiro: Shadows Die Twice",    "59,99 €"},
+//        {"Cuphead",                      "19,99 €"},
+//        {"Dead Cells",                   "24,99 €"},
+//    };
 
     // ---------- Constructor ----------
 
@@ -95,10 +115,16 @@ public class StoreUI extends JFrame {
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setBackground(PANEL_BG);
         listPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
+        
+        ClientFacade clientFacade = new ClientFacade();
+        List<Game> GAMES = clientFacade.getCatalog();        
 
-        for (int i = 0; i < GameList.size(); i++) {
-            listPanel.add(createGameRow(GameList.get(i).getTitle(), GameList.get(i).getPrice(), i));
-            if (i < GameList.size() - 1) {
+        for (int i = 0; i < GAMES.size(); i++) {
+        	Game game = GAMES.get(i);
+        	
+            listPanel.add(createGameRow(game, i));
+            
+            if (i < GAMES.size() - 1) {
                 listPanel.add(Box.createVerticalStrut(2));
             }
         }
@@ -127,7 +153,7 @@ public class StoreUI extends JFrame {
         return scrollPane;
     }
 
-    private JPanel createGameRow(String title, float price, int index) {
+    private JPanel createGameRow(Game game, int index) {
         Color base = (index % 2 == 0) ? ROW_ODD : ROW_EVEN;
 
         JPanel row = new JPanel(new BorderLayout(12, 0));
@@ -136,12 +162,13 @@ public class StoreUI extends JFrame {
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 46));
 
         // Title
-        JLabel titleLabel = new JLabel(title);
+        JLabel titleLabel = new JLabel(game.getTitle());
         titleLabel.setForeground(TEXT_LIGHT);
         titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
         // Price
-        JLabel priceLabel = new JLabel(Float.toString(price));
+        String priceFormatted = String.format("%.2f €", game.getPrice());
+        JLabel priceLabel = new JLabel(priceFormatted);
         priceLabel.setForeground(TEXT_DIM);
         priceLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         priceLabel.setPreferredSize(new Dimension(68, 20));
@@ -152,7 +179,7 @@ public class StoreUI extends JFrame {
         JButton buyBtn = createStyledButton("BUY", 65, 30);
         buyBtn.addActionListener(e ->
             JOptionPane.showMessageDialog(this,
-                "You added \"" + title + "\" to the shopping cart!",
+                "You added \"" + game.getTitle() + "\" to the shopping cart!",
                 "Shopping Cart", JOptionPane.INFORMATION_MESSAGE)
             
             // TO-DO implement checkout panel
