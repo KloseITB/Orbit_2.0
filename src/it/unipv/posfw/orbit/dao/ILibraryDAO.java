@@ -10,4 +10,6 @@ public interface ILibraryDAO {
     List<Game> getLibraryByUserId(int userId);
     
     boolean hasGame(int userId, int gameId);
+    
+    boolean removeGameFromLibrary(int userId, int gameId);
 }

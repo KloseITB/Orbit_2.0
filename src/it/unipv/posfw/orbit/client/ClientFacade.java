@@ -96,4 +96,19 @@ public class ClientFacade {
 			throw new IllegalAccessException();
 		}
 	}
+	
+	public boolean removeGame(Game game) {
+	    User user = manager.getLoggedUser();
+	    
+	    if (user != null) {
+	        
+	    	// removal from local memory
+	        user.getLibrary().getGames().remove(game);
+	        
+	        // removal from persistent memory
+	        boolean success = DAOFactory.getInstance().getLibraryDAO().removeGameFromLibrary(user.getID(), game.getID());
+	        return success;
+	    }
+	    return false;
+	}
 }
