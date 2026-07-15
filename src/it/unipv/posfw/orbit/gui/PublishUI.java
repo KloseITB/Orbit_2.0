@@ -4,6 +4,11 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.MaskFormatter;
+
+import it.unipv.posfw.orbit.dao.impl.GameDAO;
+import it.unipv.posfw.orbit.game.Game;
+
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -88,7 +93,7 @@ public class PublishUI extends JFrame{
 
         formPanel.add(createCenteredLabel("Price"));
         formPanel.add(Box.createVerticalStrut(6));
-        JTextField priceField = createTextField();
+        JFormattedTextField priceField = createPriceField();
         formPanel.add(priceField);
         formPanel.add(Box.createVerticalStrut(40));
 
@@ -106,9 +111,12 @@ public class PublishUI extends JFrame{
         
         JButton btnPublish = createStyledButton("PUBLISH", 110, 40);
         btnPublish.addActionListener(e -> {
+        	GameDAO gd = new GameDAO();
+        	Game publishedGame = new Game(titleField.getText(), genreField.getText(), Float.valueOf(priceField.getText()));
+        	gd.addGame(publishedGame);
         JOptionPane.showMessageDialog(this,
-            "You published a new game",
-            "Temp", JOptionPane.INFORMATION_MESSAGE);
+            "The game " + titleField.getText() + "has been published!",
+             "Publish Successful", JOptionPane.INFORMATION_MESSAGE);
         
         });
 
@@ -174,6 +182,31 @@ public class PublishUI extends JFrame{
         
         field.setAlignmentX(Component.CENTER_ALIGNMENT);
         return field;
+    }
+    
+    public static JFormattedTextField createPriceField() {
+        JFormattedTextField priceField = new JFormattedTextField();
+        
+        try {
+            // '#' indica che in quella posizione è consentito solo un numero (0-9)
+            MaskFormatter priceMask = new MaskFormatter("##,##€");
+            
+            // Imposta un carattere di riempimento se l'utente non ha ancora digitato nulla
+            priceMask.setPlaceholderCharacter('_'); 
+            
+            // Applica la maschera al campo di testo
+            priceMask.install(priceField);
+            
+        } catch (Exception e) {
+            System.err.println("Masking Error: " + e.getMessage());
+        }
+
+        // Stile base per coerenza con la tua UI
+        priceField.setPreferredSize(new Dimension(300, 35));
+        priceField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        priceField.setHorizontalAlignment(JTextField.CENTER);
+        
+        return priceField;
     }
     
     private JButton createStyledButton(String text, int w, int h) {

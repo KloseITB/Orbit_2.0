@@ -15,8 +15,6 @@ public class User {
 	// ---------- Constructors ----------
 	
 	public User(String nickname, String password) {
-		// this.userID = genUserID();
-		// chiamare il metodo che genera l'ID dello user, se l'ID è 0 genera una exception
 		this.nickname = nickname;
 		this.password = password;
 		this.library = new Library();

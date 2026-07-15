@@ -177,13 +177,9 @@ public class StoreUI extends JFrame {
         // Buy button
         
         JButton buyBtn = createStyledButton("BUY", 65, 30);
-        buyBtn.addActionListener(e ->
-            JOptionPane.showMessageDialog(this,
-                "You added \"" + game.getTitle() + "\" to the shopping cart!",
-                "Shopping Cart", JOptionPane.INFORMATION_MESSAGE)
-            
-            // TO-DO implement checkout panel
-        );
+        buyBtn.addActionListener(e -> {
+                new CheckoutUI(game);
+        });
 
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         rightPanel.setOpaque(false);

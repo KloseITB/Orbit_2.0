@@ -4,6 +4,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+
+import it.unipv.posfw.orbit.client.UserManager;
+import it.unipv.posfw.orbit.game.Game;
+
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -12,7 +16,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
-public class PaymentUI extends JFrame {
+public class CheckoutUI extends JFrame {
 
     // Palette colors matching the Orbit UI style
     private static final Color BG_DARK       = new Color(22, 22, 30);
@@ -21,7 +25,7 @@ public class PaymentUI extends JFrame {
     private static final Color ACCENT_HOVER  = new Color(255, 200, 50);
     private static final Color TEXT_COLOR    = new Color(220, 215, 235);
 
-    public PaymentUI() {
+    public CheckoutUI(Game game) {
         setTitle("Orbit - Purchase Game");
         
         Image img = null;
@@ -130,8 +134,11 @@ public class PaymentUI extends JFrame {
         JButton btnPurchase = createStyledButton("PURCHASE", 120, 40);
         btnPurchase.addActionListener(e -> {
             
-            JOptionPane.showMessageDialog(this, "You bought a new game", "Temp", JOptionPane.INFORMATION_MESSAGE);
-            
+            JOptionPane.showMessageDialog(this
+            		, game.getTitle() + " was added to your library"
+            		, "Purchase successful"
+            		, JOptionPane.INFORMATION_MESSAGE);
+            UserManager.getInstance().getLoggedUser().getLibrary().addGame(game);
             });
 
         buttonPanel.add(btnCancel);

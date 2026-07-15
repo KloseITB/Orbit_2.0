@@ -3,7 +3,7 @@ package it.unipv.posfw.orbit.main;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import it.unipv.posfw.orbit.gui.PaymentUI;
+import it.unipv.posfw.orbit.gui.CheckoutUI;
 import it.unipv.posfw.orbit.gui.PublishUI;
 import it.unipv.posfw.orbit.gui.StoreUI;
 
@@ -18,6 +18,6 @@ public class Main {
         	System.err.println("ERROR: Failed to initialize the GUI");
         }
 
-        SwingUtilities.invokeLater(PaymentUI::new);
+        SwingUtilities.invokeLater(StoreUI::new);
     }
 }

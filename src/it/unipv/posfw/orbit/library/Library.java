@@ -2,6 +2,8 @@ package it.unipv.posfw.orbit.library;
 
 import java.util.LinkedList;
 
+import it.unipv.posfw.orbit.client.UserManager;
+import it.unipv.posfw.orbit.dao.impl.LibraryDAO;
 import it.unipv.posfw.orbit.game.Game;
 
 public class Library {
@@ -9,6 +11,7 @@ public class Library {
 	// ---------- Variables ----------
 	
 	private LinkedList<Game> gameList;
+	LibraryDAO ld = new LibraryDAO();
 	
 	// ---------- Constructors ----------
 	
@@ -21,7 +24,7 @@ public class Library {
 	public void addGame(Game game) {
 		if(!gameList.contains(game)) {
 			gameList.add(game);
-			// update database
+			ld.addGameToLibrary(UserManager.getInstance().getLoggedUser().getID(), game.getID());
 		} else {
 			System.out.println("ERROR: game: " + game.getTitle() + " already present!");
 		}
@@ -30,7 +33,7 @@ public class Library {
 	public void removeGame(Game game) {
 		if(gameList.contains(game)) {
 			gameList.remove(game);
-			// update database
+			//ld.removeGameToLibrary(UserManager.getInstance().getLoggedUser().getID(), game.getID());
 		} else {
 			System.out.println("ERROR: game " + game.getTitle() + "not found!");
 		}

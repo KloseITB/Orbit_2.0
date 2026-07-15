@@ -2,6 +2,7 @@ package it.unipv.posfw.orbit.user;
 
 import java.util.LinkedList;
 
+import it.unipv.posfw.orbit.dao.impl.GameDAO;
 import it.unipv.posfw.orbit.game.Game;
 
 public class Publisher extends User {
@@ -9,6 +10,7 @@ public class Publisher extends User {
 	//
 	
 	private LinkedList<Game> publishedGames;
+	private GameDAO gd;
 	
 	// ---------- Constructors ----------
 	
@@ -23,6 +25,7 @@ public class Publisher extends User {
 	public Game publishGame(String name, String genre, float price) {
 		Game game = new Game(name, genre, price);
 		publishedGames.add(game);
+		gd.addGame(game);
 		return game;
 	}
 
