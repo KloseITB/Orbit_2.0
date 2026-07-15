@@ -115,7 +115,7 @@ public class PublishUI extends JFrame{
         	Game publishedGame = new Game(titleField.getText(), genreField.getText(), Float.valueOf(priceField.getText()));
         	gd.addGame(publishedGame);
         JOptionPane.showMessageDialog(this,
-            "The game " + titleField.getText() + "has been published!",
+            "The game " + titleField.getText() + " has been published!",
              "Publish Successful", JOptionPane.INFORMATION_MESSAGE);
         
         });
@@ -185,28 +185,29 @@ public class PublishUI extends JFrame{
     }
     
     public static JFormattedTextField createPriceField() {
-        JFormattedTextField priceField = new JFormattedTextField();
+        JFormattedTextField field = new JFormattedTextField();
+        field.setMaximumSize(new Dimension(300, 35));
+        field.setPreferredSize(new Dimension(300, 35));
+        field.setBackground(BG_DARK);
+        field.setForeground(TEXT_COLOR);
+        field.setCaretColor(TEXT_COLOR);
         
         try {
-            // '#' indica che in quella posizione è consentito solo un numero (0-9)
-            MaskFormatter priceMask = new MaskFormatter("##,##€");
+            MaskFormatter priceMask = new MaskFormatter("##.##");
             
-            // Imposta un carattere di riempimento se l'utente non ha ancora digitato nulla
             priceMask.setPlaceholderCharacter('_'); 
             
-            // Applica la maschera al campo di testo
-            priceMask.install(priceField);
+            priceMask.install(field);
             
         } catch (Exception e) {
             System.err.println("Masking Error: " + e.getMessage());
         }
 
-        // Stile base per coerenza con la tua UI
-        priceField.setPreferredSize(new Dimension(300, 35));
-        priceField.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        priceField.setHorizontalAlignment(JTextField.CENTER);
+        field.setPreferredSize(new Dimension(300, 35));
+        field.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        field.setHorizontalAlignment(JTextField.CENTER);
         
-        return priceField;
+        return field;
     }
     
     private JButton createStyledButton(String text, int w, int h) {
