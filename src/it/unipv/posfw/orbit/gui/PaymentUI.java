@@ -12,16 +12,17 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
-public class PublishUI extends JFrame{
-	// Color Palette
+public class PaymentUI extends JFrame {
+
+    // Palette colors matching the Orbit UI style
     private static final Color BG_DARK       = new Color(22, 22, 30);
     private static final Color PANEL_BG      = new Color(42, 38, 60);
     private static final Color ACCENT_YELLOW = new Color(230, 175, 30);
     private static final Color ACCENT_HOVER  = new Color(255, 200, 50);
     private static final Color TEXT_COLOR    = new Color(220, 215, 235);
 
-    public PublishUI() {
-        setTitle("Orbit - Publish Game");
+    public PaymentUI() {
+        setTitle("Orbit - Purchase Game");
         
         Image img = null;
 		try {
@@ -32,21 +33,22 @@ public class PublishUI extends JFrame{
         setIconImage(img);
         
         setSize(900, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         getContentPane().setBackground(BG_DARK);
 
-        // Header
+        // --- HEADER ---
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setOpaque(false);
         headerPanel.setBorder(new EmptyBorder(15, 20, 15, 20));
+
         JPanel logopanel = buildLogoPanel();
 
         headerPanel.add(logopanel, BorderLayout.WEST);
         add(headerPanel, BorderLayout.NORTH);
 
-        // Form Panel
+        // --- CENTER: Form Panel ---
         JPanel centerContainer = new JPanel(new GridBagLayout());
         centerContainer.setOpaque(false);
 
@@ -56,14 +58,17 @@ public class PublishUI extends JFrame{
         formPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(60, 58, 80), 1),
                 new EmptyBorder(40, 60, 40, 60)
+                
+                
         ));
 
-        JLabel titleLabel = new JLabel("PUBLISH A NEW GAME");
+        // Titles
+        JLabel titleLabel = new JLabel("COMPLETE YOUR PURCHASE");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titleLabel.setForeground(TEXT_COLOR);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel subtitleLabel = new JLabel("INSERT THE GAME DETAILS");
+        JLabel subtitleLabel = new JLabel("SELECT A PAYMENT METHOD");
         subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         subtitleLabel.setForeground(TEXT_COLOR);
         subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -73,47 +78,64 @@ public class PublishUI extends JFrame{
         formPanel.add(subtitleLabel);
         formPanel.add(Box.createVerticalStrut(35));
 
-        // Fields
-        formPanel.add(createCenteredLabel("Title"));
-        formPanel.add(Box.createVerticalStrut(6));
-        JTextField titleField = createTextField();
-        formPanel.add(titleField);
-        formPanel.add(Box.createVerticalStrut(16));
+        // Dropdown Menu
+        formPanel.add(createCenteredLabel("Payment Method"));
+        formPanel.add(Box.createVerticalStrut(5));
+        
+        String[] paymentMethods = {"Bitcoin", "CreditCard", "Paypal"};
+        JComboBox<String> paymentCombo = new JComboBox<>(paymentMethods);
+        paymentCombo.setForeground(BG_DARK);
+        styleComboBox(paymentCombo);
+        formPanel.add(paymentCombo);
+        formPanel.add(Box.createVerticalStrut(20));
 
-        formPanel.add(createCenteredLabel("Genre"));
-        formPanel.add(Box.createVerticalStrut(6));
-        JTextField genreField = createTextField();
-        formPanel.add(genreField);
-        formPanel.add(Box.createVerticalStrut(16));
+        // Dynamic Input Panel using CardLayout
+        CardLayout cardLayout = new CardLayout();
+        JPanel dynamicInputsPanel = new JPanel(cardLayout);
+        dynamicInputsPanel.setOpaque(false);
+        dynamicInputsPanel.setMaximumSize(new Dimension(300, 70));
 
-        formPanel.add(createCenteredLabel("Price"));
-        formPanel.add(Box.createVerticalStrut(6));
-        JTextField priceField = createTextField();
-        formPanel.add(priceField);
+        // 1. Bitcoin Card
+        JPanel bitcoinPanel = createInputCard("Wallet address");
+        // 2. CreditCard Card
+        JPanel creditCardPanel = createInputCard("Code");
+        // 3. Paypal Card
+        JPanel paypalPanel = createInputCard("Email");
+
+        dynamicInputsPanel.add(bitcoinPanel, "Bitcoin");
+        dynamicInputsPanel.add(creditCardPanel, "CreditCard");
+        dynamicInputsPanel.add(paypalPanel, "Paypal");
+
+        formPanel.add(dynamicInputsPanel);
         formPanel.add(Box.createVerticalStrut(40));
+
+        // Action Listener to switch cards when dropdown selection changes
+        paymentCombo.addActionListener(e -> {
+            String selectedMethod = (String) paymentCombo.getSelectedItem();
+            cardLayout.show(dynamicInputsPanel, selectedMethod);
+        });
 
         // Buttons
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 15, 0));
         buttonPanel.setOpaque(false);
         buttonPanel.setMaximumSize(new Dimension(300, 40));
 
-        JButton btnCancel = createStyledButton("CANCEL", 110, 40);
+        JButton btnCancel = createStyledButton("CANCEL", 120, 40);
         btnCancel.addActionListener(e -> {
-        dispose();
-    	new AccountUI();
+            dispose();
+        	new StoreUI();
+            
+            });
         
-        });
-        
-        JButton btnPublish = createStyledButton("PUBLISH", 110, 40);
-        btnPublish.addActionListener(e -> {
-        JOptionPane.showMessageDialog(this,
-            "You published a new game",
-            "Temp", JOptionPane.INFORMATION_MESSAGE);
-        
-        });
+        JButton btnPurchase = createStyledButton("PURCHASE", 120, 40);
+        btnPurchase.addActionListener(e -> {
+            
+            JOptionPane.showMessageDialog(this, "You bought a new game", "Temp", JOptionPane.INFORMATION_MESSAGE);
+            
+            });
 
         buttonPanel.add(btnCancel);
-        buttonPanel.add(btnPublish);
+        buttonPanel.add(btnPurchase);
         formPanel.add(buttonPanel);
 
         centerContainer.add(formPanel);
@@ -122,7 +144,7 @@ public class PublishUI extends JFrame{
         setVisible(true);
     }
 
-    // --- METODI DI SUPPORTO PER LA UI ---
+    // --- UI HELPER METHODS ---
     
     private JPanel buildLogoPanel() {
         JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -137,6 +159,21 @@ public class PublishUI extends JFrame{
         return wrapper;
     }
     
+    private JPanel createInputCard(String labelText) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setOpaque(false);
+
+        JLabel label = createCenteredLabel(labelText);
+        JTextField textField = createTextField();
+
+        panel.add(label);
+        panel.add(Box.createVerticalStrut(5));
+        panel.add(textField);
+
+        return panel;
+    }
+
     private JLabel createCenteredLabel(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -149,17 +186,16 @@ public class PublishUI extends JFrame{
         JTextField field = new JTextField();
         field.setMaximumSize(new Dimension(300, 35));
         field.setPreferredSize(new Dimension(300, 35));
-        field.setBackground(BG_DARK);
-        field.setForeground(TEXT_COLOR);
-        field.setCaretColor(TEXT_COLOR);
-        field.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        
+        field.setBackground(Color.WHITE);
+        field.setForeground(BG_DARK);
+        field.setCaretColor(BG_DARK);
+        field.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
         Border defaultBorder = BorderFactory.createLineBorder(new Color(70, 70, 90));
-        Border focusBorder = BorderFactory.createLineBorder(TEXT_COLOR);
-        
+        Border focusBorder = BorderFactory.createLineBorder(BG_DARK);
+
         field.setBorder(BorderFactory.createCompoundBorder(defaultBorder, new EmptyBorder(5, 10, 5, 10)));
-        
-        // Borders when focused
+
         field.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -171,11 +207,26 @@ public class PublishUI extends JFrame{
                 field.setBorder(BorderFactory.createCompoundBorder(defaultBorder, new EmptyBorder(5, 10, 5, 10)));
             }
         });
-        
+
         field.setAlignmentX(Component.CENTER_ALIGNMENT);
         return field;
     }
-    
+
+    private void styleComboBox(JComboBox<String> comboBox) {
+        comboBox.setMaximumSize(new Dimension(300, 35));
+        comboBox.setPreferredSize(new Dimension(300, 35));
+        comboBox.setBackground(ACCENT_HOVER);
+        comboBox.setForeground(BG_DARK);
+        comboBox.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        comboBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+        comboBox.setFocusable(false);
+        comboBox.setBorder(BorderFactory.createLineBorder(new Color(70, 70, 90)));
+        
+        // Customizing the dropdown list appearance
+        UIManager.put("ComboBox.selectionBackground", TEXT_COLOR);
+        UIManager.put("ComboBox.selectionForeground", Color.BLACK);
+    }
+
     private JButton createStyledButton(String text, int w, int h) {
         JButton btn = new JButton(text);
         btn.setPreferredSize(new Dimension(w, h));
