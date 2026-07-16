@@ -20,6 +20,7 @@ public class Game {
 		this.title = title;
 		this.genre = genre.toLowerCase();
 		this.price = price;
+		reviewList = new LinkedList<Review>();
 	}
 	
 	// ---------- Methods ----------

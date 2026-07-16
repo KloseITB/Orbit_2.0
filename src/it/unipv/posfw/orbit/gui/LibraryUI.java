@@ -153,6 +153,7 @@ public class LibraryUI extends JFrame {
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         rightPanel.setOpaque(false);
         rightPanel.add(playBtn);
+        rightPanel.add(reviewBtn);
 
         row.add(titleLabel, BorderLayout.CENTER);
         row.add(rightPanel, BorderLayout.EAST);
@@ -200,8 +201,8 @@ public class LibraryUI extends JFrame {
 
     private JButton createNavButton(String text) {
         JButton btn = new JButton(text);
-        btn.setPreferredSize(new Dimension(148, 58));
-        btn.setMaximumSize(new Dimension(148, 58));
+        btn.setPreferredSize(new Dimension(148, 40));
+        btn.setMaximumSize(new Dimension(148, 40));
         btn.setBackground(ACCENT_YELLOW);
         btn.setForeground(new Color(20, 20, 20));
         btn.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -219,6 +220,22 @@ public class LibraryUI extends JFrame {
     private JButton createReviewButton(String text, int w, int h) {
         JButton btn = new JButton(text);
         btn.setPreferredSize(new Dimension(w, h));
+        btn.setBackground(Color.GRAY);
+        btn.setForeground(new Color(10, 10, 10));
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) { btn.setBackground(Color.LIGHT_GRAY);  }
+            public void mouseExited (MouseEvent e) { btn.setBackground(Color.GRAY);  }
+        });
+        return btn;
+    }
+    
+    private JButton createPlayButton(String text, int w, int h) {
+        JButton btn = new JButton(text);
+        btn.setPreferredSize(new Dimension(w, h));
         btn.setBackground(PLAY_GREEN);
         btn.setForeground(new Color(10, 10, 10));
         btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -228,22 +245,6 @@ public class LibraryUI extends JFrame {
         btn.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) { btn.setBackground(PLAY_HOVER);  }
             public void mouseExited (MouseEvent e) { btn.setBackground(PLAY_GREEN);  }
-        });
-        return btn;
-    }
-    
-    private JButton createPlayButton(String text, int w, int h) {
-        JButton btn = new JButton(text);
-        btn.setPreferredSize(new Dimension(w, h));
-        btn.setBackground(PANEL_BG);
-        btn.setForeground(new Color(10, 10, 10));
-        btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btn.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) { btn.setBackground(ROW_HOVER);  }
-            public void mouseExited (MouseEvent e) { btn.setBackground(ROW_HOVER);  }
         });
         return btn;
     }
