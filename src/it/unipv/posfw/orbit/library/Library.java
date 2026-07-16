@@ -5,6 +5,11 @@ import java.util.LinkedList;
 
 import it.unipv.posfw.orbit.game.Game;
 
+/**
+ * Represents the collection of games owned by a specific user.
+ * Acts as the in-memory state of the user's purchased titles.
+ */
+
 public class Library {
 	
 	// ---------- Variables ----------

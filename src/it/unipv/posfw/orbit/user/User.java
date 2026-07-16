@@ -2,6 +2,11 @@ package it.unipv.posfw.orbit.user;
 
 import it.unipv.posfw.orbit.library.Library;
 
+/**
+ * Represents a standard user within the Orbit platform.
+ * Contains user credentials, profile information, and personal game library.
+ */
+
 public class User {
 	
 	// ---------- Variables ----------

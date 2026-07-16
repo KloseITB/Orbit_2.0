@@ -5,9 +5,10 @@ import it.unipv.posfw.orbit.dao.impl.LibraryDAO;
 import it.unipv.posfw.orbit.dao.impl.ReviewDAO;
 import it.unipv.posfw.orbit.dao.impl.UserDAO;
 
-// it's the factory to create new DAO implementations every time we need one.
-// if in the future we want to create a new database without using SQLite we just need to change the DAO implementation 
-// because the rest of the code use this class
+/**
+ * Abstract Factory Singleton responsible for providing instances of Data Access Objects (DAOs).
+ * Ensures low coupling by hiding the concrete database implementation from the domain logic.
+ */
 
 public class DAOFactory {
     

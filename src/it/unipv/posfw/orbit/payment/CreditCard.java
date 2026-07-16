@@ -1,5 +1,9 @@
 package it.unipv.posfw.orbit.payment;
 
+/**
+ * Concrete implementation of the IPaymentStrategy using Credit Card.
+ */
+
 public class CreditCard implements IPaymentStrategy{
 	
 	// ---------- Variables ----------

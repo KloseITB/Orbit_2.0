@@ -1,0 +1,9 @@
+it.unipv.posfw.orbit.client
+it.unipv.posfw.orbit.dao
+it.unipv.posfw.orbit.dao.impl
+it.unipv.posfw.orbit.game
+it.unipv.posfw.orbit.gui
+it.unipv.posfw.orbit.library
+it.unipv.posfw.orbit.main
+it.unipv.posfw.orbit.payment
+it.unipv.posfw.orbit.user

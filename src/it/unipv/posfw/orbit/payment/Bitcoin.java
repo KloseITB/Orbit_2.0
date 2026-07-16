@@ -1,5 +1,9 @@
 package it.unipv.posfw.orbit.payment;
 
+/**
+ * Concrete implementation of the IPaymentStrategy using Bitcoin.
+ */
+
 public class Bitcoin implements IPaymentStrategy {
 	
 	// ---------- Variables ----------

@@ -13,6 +13,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
+/**
+ * Graphical User Interface representing the user's personal game library.
+ * Displays purchased games and allows users to leave reviews.
+ */
+
 @SuppressWarnings("serial")
 public class LibraryUI extends JFrame {
 

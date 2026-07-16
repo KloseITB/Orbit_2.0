@@ -5,6 +5,11 @@ import java.util.LinkedList;
 import it.unipv.posfw.orbit.dao.impl.GameDAO;
 import it.unipv.posfw.orbit.game.Game;
 
+/**
+ * Represents a publisher user entity. 
+ * Inherits from User and holds additional privileges, such as publishing new games to the store.
+ */
+
 public class Publisher extends User {
 	
 	//

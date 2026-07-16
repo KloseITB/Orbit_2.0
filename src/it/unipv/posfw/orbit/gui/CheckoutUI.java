@@ -23,6 +23,11 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Graphical User Interface handling the purchase workflow.
+ * Allows the user to select a payment strategy and complete the transaction.
+ */
+
 public class CheckoutUI extends JFrame {
 
     // Palette colors matching the Orbit UI style

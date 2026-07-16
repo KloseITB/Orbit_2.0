@@ -2,6 +2,11 @@ package it.unipv.posfw.orbit.game;
 
 import java.util.LinkedList;
 
+/**
+ * Represents a videogame available in the Orbit store.
+ * Contains details such as title, genre, price, and user reviews.
+ */
+
 public class Game {
 	
 	// ---------- Variables ----------
@@ -16,7 +21,6 @@ public class Game {
 	
 	public Game(String title, String genre, float price) {
 		// this.gameID = genGameID();
-		// chiamare il metodo che genera l'ID del gioco, se l'ID è 0 genera una exception
 		this.title = title;
 		this.genre = genre.toLowerCase();
 		this.price = price;

@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-// Singleton class, establish and maintain connection to the database
+/**
+ * Utility class for managing the SQLite database connection.
+ * Provides a single point of access to the database driver.
+ */
 
 public class DBConnection {
     private static final String URL = "jdbc:sqlite:res/database/orbit_database.db"; // database directory

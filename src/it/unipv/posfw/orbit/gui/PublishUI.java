@@ -17,6 +17,11 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Graphical User Interface restricted to Publishers.
+ * Allows the insertion of new games into the platform's catalog.
+ */
+
 public class PublishUI extends JFrame{
 	// Color Palette
     private static final Color BG_DARK       = new Color(22, 22, 30);

@@ -9,6 +9,12 @@ import it.unipv.posfw.orbit.payment.IPaymentStrategy;
 import it.unipv.posfw.orbit.user.Publisher;
 import it.unipv.posfw.orbit.user.User;
 
+/**
+ * Singleton class acting as the central controller (Facade pattern).
+ * It manages the interactions between the Graphical User Interface (View),
+ * the Domain Model, and the Persistence Layer (DAOs).
+ */
+
 public class ClientFacade {
 	
 	//---------- Variables ----------
@@ -29,6 +35,14 @@ public class ClientFacade {
 		}
 		return instance;
 	}
+	
+	/**
+     * Processes the purchase of a game for the logged-in user.
+     * Checks if the user already owns the game before proceeding with the payment.
+     * * @param paymentStrategy The selected payment method (Strategy pattern).
+     * @param game The game to be purchased.
+     * @return true if the purchase was successful, false if the game is already owned or an error occurred.
+     */
 	
 	public boolean buyGame(IPaymentStrategy paymentStrategy, Game game) {
 		
@@ -76,6 +90,13 @@ public class ClientFacade {
         
         return true;
 	}
+	
+	/**
+     * Authenticates a user by checking credentials against the database.
+     * * @param nickname The user's chosen nickname.
+     * @param password The user's password.
+     * @return The authenticated User object, or null if credentials are invalid.
+     */
 	
 	public User login(String nickname, String password) {
 		

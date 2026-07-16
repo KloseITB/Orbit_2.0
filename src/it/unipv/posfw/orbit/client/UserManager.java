@@ -2,6 +2,11 @@ package it.unipv.posfw.orbit.client;
 
 import it.unipv.posfw.orbit.user.User;
 
+/**
+ * Singleton class responsible for managing the state of the currently logged-in user.
+ * It holds the session data across the application.
+ */
+
 public class UserManager {
 	
 	// ---------- Variables ----------

@@ -3,6 +3,10 @@ package it.unipv.posfw.orbit.dao;
 import it.unipv.posfw.orbit.game.Game;
 import java.util.List;
 
+/**
+ * Interface defining the data access operations for the Game entity.
+ */
+
 public interface IGameDAO {
 	
     boolean addGame(Game game);

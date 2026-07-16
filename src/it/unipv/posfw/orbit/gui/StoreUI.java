@@ -14,6 +14,11 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Graphical User Interface representing the main store catalog.
+ * Displays available games and allows users to proceed to checkout.
+ */
+
 @SuppressWarnings("serial")
 public class StoreUI extends JFrame {
 
