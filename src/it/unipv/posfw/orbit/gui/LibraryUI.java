@@ -3,6 +3,7 @@ package it.unipv.posfw.orbit.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import it.unipv.posfw.orbit.client.ClientFacade;
 import it.unipv.posfw.orbit.client.UserManager;
 import it.unipv.posfw.orbit.game.Game;
 
@@ -28,10 +29,6 @@ public class LibraryUI extends JFrame {
     private static final Color PLAY_HOVER     = new Color(80, 220, 100);
     private static final Color TEXT_LIGHT     = new Color(220, 215, 235);
     private static final Color SCROLLBAR_BG   = new Color(35, 32, 50);
-
-    //   GIOCHI DELLA LIBRERIA — PLACEHOLDER
-    //   Sostituire questo array con il caricamento dinamico dei giochi
-    //   acquistati dall'utente
 
     private final LinkedList<Game> ownedGames = UserManager.getInstance().getLoggedUser().getLibrary().getGames();
     
@@ -92,7 +89,7 @@ public class LibraryUI extends JFrame {
         listPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 
         for (int i = 0; i < ownedGames.size(); i++) {
-            listPanel.add(createGameRow(ownedGames.get(i).getTitle(), i));
+            listPanel.add(createGameRow(ownedGames.get(i), i));
             if (i < ownedGames.size() - 1) {
                 listPanel.add(Box.createVerticalStrut(2));
             }
@@ -122,7 +119,7 @@ public class LibraryUI extends JFrame {
         return scrollPane;
     }
 
-    private JPanel createGameRow(String title, int index) {
+    private JPanel createGameRow(Game game, int index) {
         Color base = (index % 2 == 0) ? ROW_ODD : ROW_EVEN;
 
         JPanel row = new JPanel(new BorderLayout(12, 0));
@@ -131,18 +128,28 @@ public class LibraryUI extends JFrame {
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 46));
 
         // Title
-        JLabel titleLabel = new JLabel(title);
+        JLabel titleLabel = new JLabel(game.getTitle());
         titleLabel.setForeground(TEXT_LIGHT);
         titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
+        
+        // Review button
+        JButton reviewBtn = createReviewButton("REVIEW", 80, 30);
+        reviewBtn.addActionListener(e ->{
+        	int vote = getUserVote();
+        	if(vote != 0) {
+        		ClientFacade.getInstance().reviewGame(game, vote);
+        	}
+        	
+        });
+        
         // Play button
         JButton playBtn = createPlayButton("PLAY", 65, 30);
         playBtn.addActionListener(e ->
             JOptionPane.showMessageDialog(this,
-                "Starting \"" + title + "\"...",
+                "Starting \"" + game.getTitle() + "\"...",
                 "Game Starting", JOptionPane.INFORMATION_MESSAGE)
         );
-
+        
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         rightPanel.setOpaque(false);
         rightPanel.add(playBtn);
@@ -208,8 +215,8 @@ public class LibraryUI extends JFrame {
         });
         return btn;
     }
-
-    private JButton createPlayButton(String text, int w, int h) {
+    
+    private JButton createReviewButton(String text, int w, int h) {
         JButton btn = new JButton(text);
         btn.setPreferredSize(new Dimension(w, h));
         btn.setBackground(PLAY_GREEN);
@@ -223,5 +230,43 @@ public class LibraryUI extends JFrame {
             public void mouseExited (MouseEvent e) { btn.setBackground(PLAY_GREEN);  }
         });
         return btn;
+    }
+    
+    private JButton createPlayButton(String text, int w, int h) {
+        JButton btn = new JButton(text);
+        btn.setPreferredSize(new Dimension(w, h));
+        btn.setBackground(PANEL_BG);
+        btn.setForeground(new Color(10, 10, 10));
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btn.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) { btn.setBackground(ROW_HOVER);  }
+            public void mouseExited (MouseEvent e) { btn.setBackground(ROW_HOVER);  }
+        });
+        return btn;
+    }
+    
+    private int getUserVote() {
+    	Integer[] votes = {1, 2, 3, 4, 5};
+
+    	Integer userVote = (Integer) JOptionPane.showInputDialog(
+    	        this,                           
+    	        "Select a review rating:",  
+    	        "Review the game",              
+    	        JOptionPane.PLAIN_MESSAGE,      
+    	        null,                           
+    	        votes,                           
+    	        votes[4]                         
+    	);
+
+    	if (userVote != null) {
+    	    System.out.println("The user's vote is: " + userVote);
+    	    return userVote;
+    	} else {
+    	    System.out.println("Operation canceled.");
+    	    return 0;
+    	}
     }
 }

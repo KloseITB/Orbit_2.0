@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.unipv.posfw.orbit.dao.DAOFactory;
 import it.unipv.posfw.orbit.dao.impl.LibraryDAO;
+import it.unipv.posfw.orbit.dao.impl.ReviewDAO;
 import it.unipv.posfw.orbit.game.Game;
 import it.unipv.posfw.orbit.game.Review;
 import it.unipv.posfw.orbit.payment.IPaymentStrategy;
@@ -15,6 +16,8 @@ public class ClientFacade {
 	//---------- Variables ----------
 	
 	private UserManager manager = UserManager.getInstance();
+	private ReviewDAO rd = new ReviewDAO();
+	
 	private static ClientFacade instance;
 	
 	// ---------- Constructor ----------
@@ -39,7 +42,7 @@ public class ClientFacade {
 	public void reviewGame(Game game, int vote) {
 		Review review = new Review(manager.getLoggedUser(), vote);
 		game.addReview(review);
-		// salvare la review nel database
+		rd.addReview(review, game.getID());
 	}
 	
 	public User login(String nickname, String password) {
