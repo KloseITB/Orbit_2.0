@@ -69,4 +69,26 @@ public class ReviewDAO implements IReviewDAO {
         }
         return reviews;
     }
+    
+    @Override
+    public boolean hasUserReviewedGame(int userId, int gameId) {
+        // it use SELECT 1 to verify quickly the existence of the review
+        String query = "SELECT 1 FROM Reviews WHERE userID = ? AND gameID = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, gameId);
+            
+            ResultSet rs = pstmt.executeQuery();
+            
+            // if rs is true, the review exist already
+            return rs.next();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

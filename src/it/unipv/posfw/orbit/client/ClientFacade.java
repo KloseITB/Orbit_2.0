@@ -16,7 +16,6 @@ public class ClientFacade {
 	//---------- Variables ----------
 	
 	private UserManager manager = UserManager.getInstance();
-	private ReviewDAO rd = new ReviewDAO();
 	
 	private static ClientFacade instance;
 	
@@ -56,10 +55,28 @@ public class ClientFacade {
 		
 	}
 	
-	public void reviewGame(Game game, int vote) {
-		Review review = new Review(manager.getLoggedUser(), vote);
-		game.addReview(review);
-		rd.addReview(review, game.getID());
+	public boolean reviewGame(Game game, int vote) {
+		User user = manager.getLoggedUser();
+        
+        if (user == null) {
+        	return false;
+        }
+        
+        // if the user has reviewed the game
+        boolean alreadyReviewed = DAOFactory.getInstance().getReviewDAO().hasUserReviewedGame(user.getID(), game.getID());
+        
+        if (alreadyReviewed) {
+        	System.err.println("Errore: l'utente " + user.getNickname() + " ha già recensito il gioco '" + game.getTitle() + "'.");
+        	return false; // cancel uploading the review
+        }
+        
+        // if the user didn't reviewed the game it proceed to do so
+        Review review = new Review(user, vote);
+        
+        game.addReview(review); // add review locally
+        DAOFactory.getInstance().getReviewDAO().addReview(review, game.getID()); // add review in the DB
+        
+        return true;
 	}
 	
 	public User login(String nickname, String password) {

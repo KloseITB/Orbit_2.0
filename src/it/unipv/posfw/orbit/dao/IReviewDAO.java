@@ -9,4 +9,6 @@ public interface IReviewDAO {
 	boolean addReview(Review review, int gameId);
     
 	List<Review> getReviewsByGameId(int gameId);
+	
+	boolean hasUserReviewedGame(int userId, int gameId);
 }

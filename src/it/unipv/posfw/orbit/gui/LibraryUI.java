@@ -135,11 +135,31 @@ public class LibraryUI extends JFrame {
         // Review button
         JButton reviewBtn = createReviewButton("REVIEW", 80, 30);
         reviewBtn.addActionListener(e ->{
-        	int vote = getUserVote();
-        	if(vote != 0) {
-        		ClientFacade.getInstance().reviewGame(game, vote);
-        	}
         	
+        	int vote = getUserVote();
+        	
+        	boolean success = ClientFacade.getInstance().reviewGame(game, vote);
+        	
+        	if (success) {
+                // success pop-up
+                JOptionPane.showMessageDialog(
+                    LibraryUI.this,
+                    "Recensione pubblicata con successo!", 
+                    "Operazione completata", 
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+                
+                
+            } else {
+                // error pop-up
+                JOptionPane.showMessageDialog(
+                    LibraryUI.this, 
+                    "Impossibile pubblicare: hai già recensito questo gioco!", 
+                    "Errore di duplicazione", 
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
+        	     	
         });
         
         // Play button
