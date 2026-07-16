@@ -42,10 +42,19 @@ public class LibraryDAO implements ILibraryDAO {
             ResultSet rs = pstmt.executeQuery();
             
             while (rs.next()) {
+            	// gets the data from db
+            	int id = rs.getInt("gameID");
+                String title = rs.getString("title");
+                String genre = rs.getString("genre");
+                float price = rs.getFloat("price");
+                
                 Game game = new Game(rs.getString("title"), rs.getString("genre"), rs.getFloat("price"));
+                game.setID(id);
+                
                 library.add(game);
             }
         } catch (SQLException e) {
+        	System.err.println("Library loading error" + e.getMessage());
             e.printStackTrace();
         }
         return library;

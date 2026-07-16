@@ -2,8 +2,7 @@ package it.unipv.posfw.orbit.library;
 
 import java.util.LinkedList;
 
-import it.unipv.posfw.orbit.client.UserManager;
-import it.unipv.posfw.orbit.dao.impl.LibraryDAO;
+
 import it.unipv.posfw.orbit.game.Game;
 
 public class Library {
@@ -11,7 +10,6 @@ public class Library {
 	// ---------- Variables ----------
 	
 	private LinkedList<Game> gameList;
-	LibraryDAO ld = new LibraryDAO();
 	
 	// ---------- Constructors ----------
 	
@@ -22,18 +20,35 @@ public class Library {
 	// ---------- Methods ----------
 	
 	public void addGame(Game game) {
-		if(!gameList.contains(game)) {
+		
+		//manual check with id to avoid double save in local memory
+		boolean alreadyOwned = false;
+		for(Game g : gameList) {
+			if(g.getID() == game.getID()) {
+				alreadyOwned = true;
+				break;
+			}
+		}
+		
+		if(!alreadyOwned) {
 			gameList.add(game);
-			ld.addGameToLibrary(UserManager.getInstance().getLoggedUser().getID(), game.getID());
 		} else {
 			System.out.println("ERROR: game: " + game.getTitle() + " already present!");
 		}
 	}
 	
 	public void removeGame(Game game) {
-		if(gameList.contains(game)) {
+		
+		boolean alreadyOwned = false;
+		for(Game g : gameList) {
+			if(g.getID() == game.getID()) {
+				alreadyOwned = true;
+				break;
+			}
+		}
+		
+		if(alreadyOwned) {
 			gameList.remove(game);
-			//ld.removeGameToLibrary(UserManager.getInstance().getLoggedUser().getID(), game.getID());
 		} else {
 			System.out.println("ERROR: game " + game.getTitle() + "not found!");
 		}

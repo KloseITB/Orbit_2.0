@@ -168,7 +168,15 @@ public class CheckoutUI extends JFrame {
                     break;
             }
             
-            ClientFacade.getInstance().buyGame(paymentStrategy, game);
+            boolean success = ClientFacade.getInstance().buyGame(paymentStrategy, game);
+            
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Purchase completed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+                new StoreUI(); // go back to store
+            } else {
+                JOptionPane.showMessageDialog(this, "You already own this game!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
             
             });
 

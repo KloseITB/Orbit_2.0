@@ -33,10 +33,27 @@ public class ClientFacade {
 		return instance;
 	}
 	
-	public void buyGame(IPaymentStrategy paymentStrategy, Game game) {
+	public boolean buyGame(IPaymentStrategy paymentStrategy, Game game) {
+		
+		User user = manager.getLoggedUser();
+		
+		// control if the game is already owned
+		for (Game ownedGame : user.getLibrary().getGames()) {
+	        if (ownedGame.getID() == game.getID()) {
+	            System.err.println("Acquisto bloccato: l'utente possiede già questo gioco.");
+	            return false; //if already owned it block the payment
+	        }
+	    }
+		
 		paymentStrategy.pay(game.getPrice());
-		manager.getLoggedUser().getLibrary().addGame(game);
-		addGameToLibrary(UserManager.getInstance().getLoggedUser(), game);
+		
+		// add the game both locally
+		user.getLibrary().addGame(game);
+		
+		DAOFactory.getInstance().getLibraryDAO().addGameToLibrary(user.getID(), game.getID());
+		
+		return true; // purchase successful
+		
 	}
 	
 	public void reviewGame(Game game, int vote) {
@@ -51,6 +68,8 @@ public class ClientFacade {
 		
 		if (user != null && user.getPassword().equals(password)) {
 			
+			manager.setLoggedUser(user);
+			
 			// recover users's library from the DB
 			List<Game> userGames = DAOFactory.getInstance().getLibraryDAO().getLibraryByUserId(user.getID());
 			// populate local memory
@@ -59,7 +78,7 @@ public class ClientFacade {
 			}
 			
 			// set user as logged in
-			manager.setLoggedUser(user);
+			
 			manager.setLoggedIn(true);
 			
 			return user; // login successful
@@ -109,9 +128,4 @@ public class ClientFacade {
 		}
 	}
 	
-	public void addGameToLibrary(User user, Game game) {
-		user.getLibrary().addGame(game);
-		LibraryDAO ld = new LibraryDAO();
-		ld.addGameToLibrary(user.getID(), game.getID());
-	}
 }

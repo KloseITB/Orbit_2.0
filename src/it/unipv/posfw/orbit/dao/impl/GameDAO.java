@@ -57,7 +57,7 @@ public class GameDAO implements IGameDAO {
             
             while (rs.next()) {
                 Game game = new Game(rs.getString("title"), rs.getString("genre"), rs.getFloat("price"));
-                
+                game.setID(rs.getInt("gameID"));
                 games.add(game);
             }
         } catch (SQLException e) {
