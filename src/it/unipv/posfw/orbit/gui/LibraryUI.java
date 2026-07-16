@@ -159,8 +159,8 @@ public class LibraryUI extends JFrame {
                 // error pop-up
                 JOptionPane.showMessageDialog(
                     LibraryUI.this, 
-                    "Impossibile pubblicare: hai già recensito questo gioco!", 
-                    "Errore di duplicazione", 
+                    "You already gave a rating to this game!", 
+                    "Review error", 
                     JOptionPane.ERROR_MESSAGE
                 );
             }
