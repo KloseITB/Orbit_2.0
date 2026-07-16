@@ -14,13 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReviewDAO implements IReviewDAO {
+	
+	private static final String INSERT_REVIEW = "INSERT INTO Reviews (userID, gameID, rating) VALUES (?, ?, ?)";
+	private static final String GET_REVIEW_BY_GAME_ID = "SELECT * FROM Reviews WHERE gameID = ?";
+	private static final String HAS_USER_REVIEWED_GAME = "SELECT 1 FROM Reviews WHERE userID = ? AND gameID = ?";
 
     @Override
     public boolean addReview(Review review, int gameId) {
-        String query = "INSERT INTO Reviews (userID, gameID, rating) VALUES (?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(INSERT_REVIEW)) {
             
         	// Fetch the user ID directly from the reviewer object inside the Review record
             pstmt.setInt(1, review.reviewer().getID());
@@ -40,11 +43,11 @@ public class ReviewDAO implements IReviewDAO {
 
     @Override
     public List<Review> getReviewsByGameId(int gameId) {
-        List<Review> reviews = new ArrayList<>();
-        String query = "SELECT * FROM Reviews WHERE gameID = ?";
+        
+    	List<Review> reviews = new ArrayList<>();
         
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(GET_REVIEW_BY_GAME_ID)) {
             
             pstmt.setInt(1, gameId);
             ResultSet rs = pstmt.executeQuery();
@@ -72,11 +75,9 @@ public class ReviewDAO implements IReviewDAO {
     
     @Override
     public boolean hasUserReviewedGame(int userId, int gameId) {
-        // it use SELECT 1 to verify quickly the existence of the review
-        String query = "SELECT 1 FROM Reviews WHERE userID = ? AND gameID = ?";
         
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(HAS_USER_REVIEWED_GAME)) {
             
             pstmt.setInt(1, userId);
             pstmt.setInt(2, gameId);

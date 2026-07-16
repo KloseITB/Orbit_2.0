@@ -3,8 +3,6 @@ package it.unipv.posfw.orbit.client;
 import java.util.List;
 
 import it.unipv.posfw.orbit.dao.DAOFactory;
-import it.unipv.posfw.orbit.dao.impl.LibraryDAO;
-import it.unipv.posfw.orbit.dao.impl.ReviewDAO;
 import it.unipv.posfw.orbit.game.Game;
 import it.unipv.posfw.orbit.game.Review;
 import it.unipv.posfw.orbit.payment.IPaymentStrategy;

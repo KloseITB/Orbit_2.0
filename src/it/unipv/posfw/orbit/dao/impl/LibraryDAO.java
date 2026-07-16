@@ -12,12 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryDAO implements ILibraryDAO {
+	
+	private static final String INSERT_GAME = "INSERT INTO Library (userID, gameID) VALUES (?, ?)";
+	private static final String GET_LIBRARY_BY_USER_ID = "SELECT g.* FROM Games g INNER JOIN Library l ON g.gameID = l.gameID WHERE l.userID = ?";
+	private static final String HAS_GAME = "SELECT 1 FROM Library WHERE userID = ? AND gameID = ?";
+	private static final String REMOVE_GAME_FROM_LIBRARY = "DELETE FROM Library WHERE userID = ? AND gameID = ?";
 
     @Override
     public boolean addGameToLibrary(int userId, int gameId) {
-        String query = "INSERT INTO Library (userID, gameID) VALUES (?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+		try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(INSERT_GAME)) {
             
             pstmt.setInt(1, userId);
             pstmt.setInt(2, gameId);
@@ -31,12 +36,11 @@ public class LibraryDAO implements ILibraryDAO {
 
     @Override
     public List<Game> getLibraryByUserId(int userId) {
-        List<Game> library = new ArrayList<>();
-        // Does a JOIN between the Library and Games tables to obtain complete details of owned games
-        String query = "SELECT g.* FROM Games g INNER JOIN Library l ON g.gameID = l.gameID WHERE l.userID = ?";
+        
+    	List<Game> library = new ArrayList<>();
         
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(GET_LIBRARY_BY_USER_ID)) {
             
             pstmt.setInt(1, userId);
             ResultSet rs = pstmt.executeQuery();
@@ -62,11 +66,9 @@ public class LibraryDAO implements ILibraryDAO {
     
     @Override
     public boolean hasGame(int userId, int gameId) {
-    	// we use SELECT 1 just to check the existence of the game in the list
-        String query = "SELECT 1 FROM Library WHERE userID = ? AND gameID = ?";
-        
+    	
         try (Connection conn = DBConnection.getConnection();
-        	 PreparedStatement pstmt = conn.prepareStatement(query)) {
+        	 PreparedStatement pstmt = conn.prepareStatement(HAS_GAME)) {
         	
             pstmt.setInt(1, userId);
             pstmt.setInt(2, gameId);
@@ -83,11 +85,9 @@ public class LibraryDAO implements ILibraryDAO {
     
     @Override
     public boolean removeGameFromLibrary(int userId, int gameId) {
-        // remove selected game from a specific user
-        String query = "DELETE FROM Library WHERE userID = ? AND gameID = ?";
-        
+                
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(REMOVE_GAME_FROM_LIBRARY)) {
             
             pstmt.setInt(1, userId);
             pstmt.setInt(2, gameId);

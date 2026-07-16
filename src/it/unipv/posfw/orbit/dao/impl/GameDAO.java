@@ -9,12 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameDAO implements IGameDAO {
+	
+	private static final String INSERT_GAME = "INSERT INTO Games (title, genre, price) VALUES (?, ?, ?)";
+	private static final String SELECT_GAME_BY_ID = "SELECT * FROM Games WHERE gameID = ?";
+	private static final String SELECT_ALL_GAMES = "SELECT * FROM Games";
 
     @Override
     public boolean addGame(Game game) {
-        String query = "INSERT INTO Games (title, genre, price) VALUES (?, ?, ?)";
+        
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(INSERT_GAME)) {
             
             pstmt.setString(1, game.getTitle());
             pstmt.setString(2, game.genre());
@@ -29,9 +33,9 @@ public class GameDAO implements IGameDAO {
 
     @Override
     public Game getGameById(int id) {
-        String query = "SELECT * FROM Games WHERE gameID = ?";
+        
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+             PreparedStatement pstmt = conn.prepareStatement(SELECT_GAME_BY_ID)) {
             
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -49,11 +53,11 @@ public class GameDAO implements IGameDAO {
 
     @Override
     public List<Game> getAllGames() {
+    	
         List<Game> games = new ArrayList<>();
-        String query = "SELECT * FROM Games";
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+             ResultSet rs = stmt.executeQuery(SELECT_ALL_GAMES)) {
             
             while (rs.next()) {
                 Game game = new Game(rs.getString("title"), rs.getString("genre"), rs.getFloat("price"));

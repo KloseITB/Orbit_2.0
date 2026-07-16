@@ -11,12 +11,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAO implements IUserDAO {
+	
+	private static final String INSERT_USER = "INSERT INTO Users (nickname, password, is_publisher) VALUES (?, ?, ?)";
+	private static final String GET_USER_BY_ID = "SELECT * FROM Users WHERE userID = ?";
+	private static final String GET_USER_BY_NICKNAME = "SELECT * FROM Users WHERE nickname = ?";
 
     @Override
     public boolean addUser(User user, boolean isPublisher) {
-        String query = "INSERT INTO Users (nickname, password, is_publisher) VALUES (?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+		try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(INSERT_USER)) {
             
             pstmt.setString(1, user.getNickname());
             pstmt.setString(2, user.getPassword());
@@ -31,12 +35,12 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public User getUserById(int id) {
-        return getUserByQuery("SELECT * FROM Users WHERE userID = ?", id, null);
+        return getUserByQuery(GET_USER_BY_ID, id, null);
     }
 
     @Override
     public User getUserByNickname(String nickname) {
-        return getUserByQuery("SELECT * FROM Users WHERE nickname = ?", -1, nickname);
+        return getUserByQuery(GET_USER_BY_NICKNAME, -1, nickname);
     }
     
     // Private helper method 
